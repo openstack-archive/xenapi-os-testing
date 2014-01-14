@@ -5,7 +5,7 @@ set -eux
 XENSERVER_PASSWORD="password"
 APPLIANCE_URL="http://downloads.vmd.citrix.com/OpenStack/xenapi-in-the-cloud-appliances/master.xva"
 KEY_NAME="matekey"
-KEY_PATH="../xenapi-in-the-cloud/matekey.pem"
+KEY_PATH="$(pwd)/../xenapi-in-the-cloud/$KEY_NAME.pem"
 
 # Download dependencies
 

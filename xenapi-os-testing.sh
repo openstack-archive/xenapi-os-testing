@@ -56,7 +56,10 @@ EOF
 
 eval $(ssh-agent)
 
-remote-bash << EOF
+ssh-add $KEY_PATH
+
+set +e
+remote-bash root@$IP << EOF
 set -eux
 apt-get update
 
@@ -73,3 +76,13 @@ chmod -R a+rx /opt/nodepool-scripts
 
 cd /opt/nodepool-scripts && ./prepare_node_devstack.sh trialnode
 EOF
+
+RESULT="$?"
+
+ssh-agent -k
+
+cat << EOF
+Result is: $RESULT
+EOF
+
+exit $RESULT

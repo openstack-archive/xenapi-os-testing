@@ -47,3 +47,9 @@ ssh \
     root@$IP bash /opt/xenapi-in-the-cloud/xenapi-in-rs.sh $XENSERVER_PASSWORD $APPLIANCE_URL
 
 ./wait-until-done.sh $IP $KEY_PATH
+
+cat << EOF
+Instance is accessible with:
+
+ssh $SSH_PARAMS root@$IP
+EOF

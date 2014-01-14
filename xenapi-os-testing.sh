@@ -9,7 +9,7 @@ KEY_PATH="../xenapi-in-the-cloud/matekey.pem"
 
 # Download dependencies
 
-for dep in openstack-xenapi-testing-xva remote-bash; do
+for dep in xenapi-in-the-cloud remote-bash; do
     if [ -e $dep ]; then
         ( cd $dep; git pull; )
     else
@@ -18,13 +18,11 @@ for dep in openstack-xenapi-testing-xva remote-bash; do
 
     if [ -e "$dep/bin" ]; then
         export PATH=$PATH:$(pwd)/$dep/bin
-    else
-        export PATH=$PATH:$(pwd)/$dep
     fi
 
 done
 
-cd openstack-xenapi-testing-xva
+cd xenapi-in-the-cloud
 
 nova boot \
     --poll \
@@ -32,7 +30,7 @@ nova boot \
     --flavor "performance1-8" \
     --key-name $KEY_NAME instance
 
-IP=$(get-ip-address-of-instance.sh instance)
+IP=$(./get-ip-address-of-instance.sh instance)
 
 SSH_PARAMS="-i $KEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
@@ -48,4 +46,4 @@ ssh \
     $SSH_PARAMS \
     root@$IP bash /opt/xenapi-in-the-cloud/xenapi-in-rs.sh $XENSERVER_PASSWORD $APPLIANCE_URL
 
-wait-until-done.sh $IP $KEY_PATH
+./wait-until-done.sh $IP $KEY_PATH

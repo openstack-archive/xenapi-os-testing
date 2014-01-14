@@ -69,6 +69,8 @@ mkdir src
 cd src
 git clone https://review.openstack.org/p/openstack-infra/config
 
+cd config
+
 # Emulate nodepool behavior
 mkdir -p /opt/nodepool-scripts
 cp modules/openstack_project/files/nodepool/scripts/* /opt/nodepool-scripts/

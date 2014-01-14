@@ -63,7 +63,7 @@ remote-bash root@$IP << EOF
 set -eux
 apt-get update
 
-apt-get -qy install git python-pip
+apt-get -qy install git python-pip curl
 
 mkdir src
 cd src
@@ -77,6 +77,21 @@ cp modules/openstack_project/files/nodepool/scripts/* /opt/nodepool-scripts/
 chmod -R a+rx /opt/nodepool-scripts
 
 cd /opt/nodepool-scripts && ./prepare_node_devstack.sh trialnode
+
+# Emulate jenkins
+cd
+git clone https://github.com/matelakat/devstack-gate -b xenserver-integration
+
+export PYTHONUNBUFFERED=true
+export DEVSTACK_GATE_TEMPEST=1
+export DEVSTACK_GATE_TEMPEST_FULL=1
+export DEVSTACK_GATE_VIRT_DRIVER=xenapi
+export BRANCH_OVERRIDE={branch-override}
+if [ "$BRANCH_OVERRIDE" != "default" ] ; then
+    export ZUUL_BRANCH=$BRANCH_OVERRIDE
+fi
+cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
+./safe-devstack-vm-gate-wrap.sh
 EOF
 
 RESULT="$?"

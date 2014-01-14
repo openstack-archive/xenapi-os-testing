@@ -4,6 +4,8 @@ set -eux
 
 XENSERVER_PASSWORD="password"
 APPLIANCE_URL="http://downloads.vmd.citrix.com/OpenStack/xenapi-in-the-cloud-appliances/master.xva"
+KEY_NAME="matekey"
+KEY_PATH="../xenapi-in-the-cloud/matekey.pem"
 
 # Download dependencies
 
@@ -25,11 +27,11 @@ nova boot \
     --poll \
     --image "62df001e-87ee-407c-b042-6f4e13f5d7e1" \
     --flavor "performance1-8" \
-    --key-name matekey instance
+    --key-name $KEY_NAME instance
 
 IP=$(./get-ip-address-of-instance.sh instance)
 
-SSH_PARAMS="-i matekey.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+SSH_PARAMS="-i $KEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 ssh \
     $SSH_PARAMS \
@@ -43,4 +45,4 @@ ssh \
     $SSH_PARAMS \
     root@$IP bash /opt/xenapi-in-the-cloud/xenapi-in-rs.sh $XENSERVER_PASSWORD $APPLIANCE_URL
 
-./wait-until-done.sh $IP matekey.priv
+./wait-until-done.sh $IP $KEY_PATH

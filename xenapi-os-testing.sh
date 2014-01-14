@@ -53,3 +53,23 @@ Instance is accessible with:
 
 ssh $SSH_PARAMS root@$IP
 EOF
+
+eval $(ssh-agent)
+
+remote-bash << EOF
+set -eux
+apt-get update
+
+apt-get -qy install git python-pip
+
+mkdir src
+cd src
+git clone https://review.openstack.org/p/openstack-infra/config
+
+# Emulate nodepool behavior
+mkdir -p /opt/nodepool-scripts
+cp modules/openstack_project/files/nodepool/scripts/* /opt/nodepool-scripts/
+chmod -R a+rx /opt/nodepool-scripts
+
+cd /opt/nodepool-scripts && ./prepare_node_devstack.sh trialnode
+EOF

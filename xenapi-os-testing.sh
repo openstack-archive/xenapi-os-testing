@@ -84,7 +84,17 @@ if ! [ "$RESULT" = "0" ]; then
     exit $RESULT
 fi
 
-sleep 15
+# Wait until the box comes back
+while true; do
+    remote-bash jenkins@$IP << EOF
+set -eux
+true
+EOF
+    if [ "$?" = "0" ]; then
+        break
+    fi
+    sleep 1
+done
 
 remote-bash jenkins@$IP << EOF
 # These came from the Readme

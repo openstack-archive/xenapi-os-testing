@@ -58,6 +58,8 @@ eval $(ssh-agent)
 
 ssh-add $KEY_PATH
 
+SSH_KEYS="$(cat .ssh/authorized_keys)"
+
 set +e
 remote-bash root@$IP << EOF
 set -eux
@@ -67,22 +69,25 @@ apt-get -qy install git python-pip curl
 
 mkdir src
 cd src
-#git clone https://review.openstack.org/p/openstack-infra/config
-git clone https://github.com/matelakat/config -b testing-config
+git clone https://review.openstack.org/p/openstack-infra/config
 
-cd config
+config/install_puppet.sh
+config/install_modules.sh
+puppet apply --modulepath=/root/config/modules:/etc/puppet/modules -e "class { openstack_project::slave_template: install_users => false,ssh_key => \\"${SSH_KEYS}\\" }"
+echo HostKey /etc/ssh/ssh_host_ecdsa_key >> /etc/ssh/sshd_config
+reboot
+EOF
 
-# Emulate nodepool behavior
-mkdir -p /opt/nodepool-scripts
-cp modules/openstack_project/files/nodepool/scripts/* /opt/nodepool-scripts/
-chmod -R a+rx /opt/nodepool-scripts
+RESULT="$?"
 
-cd /opt/nodepool-scripts && ./prepare_node_devstack.sh trialnode
+if ! [ "$RESULT" = "0" ]; then
+    ssh-agent -k
+    exit $RESULT
+fi
 
-# Emulate jenkins
-cd
-git clone https://github.com/matelakat/devstack-gate -b xenserver-integration
+sleep 15
 
+remote-bash jenkins@$IP << EOF
 # These came from the Readme
 export REPO_URL=https://review.openstack.org/p
 export ZUUL_URL=/home/jenkins/workspace-cache

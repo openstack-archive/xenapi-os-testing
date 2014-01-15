@@ -67,7 +67,8 @@ apt-get -qy install git python-pip curl
 
 mkdir src
 cd src
-git clone https://review.openstack.org/p/openstack-infra/config
+#git clone https://review.openstack.org/p/openstack-infra/config
+git clone https://github.com/matelakat/config -b testing-config
 
 cd config
 

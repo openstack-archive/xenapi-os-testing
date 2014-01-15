@@ -58,7 +58,6 @@ eval $(ssh-agent)
 
 ssh-add $KEY_PATH
 
-SSH_KEYS="$(cat .ssh/authorized_keys)"
 
 set +e
 remote-bash root@$IP << EOF
@@ -67,13 +66,15 @@ apt-get update
 
 apt-get -qy install git python-pip curl
 
+SSH_KEYS="\$(cat .ssh/authorized_keys)"
+
 mkdir src
 cd src
 git clone https://review.openstack.org/p/openstack-infra/config
 
 config/install_puppet.sh
 config/install_modules.sh
-puppet apply --modulepath=/root/config/modules:/etc/puppet/modules -e "class { openstack_project::slave_template: install_users => false,ssh_key => \\"${SSH_KEYS}\\" }"
+puppet apply --modulepath=/root/config/modules:/etc/puppet/modules -e "class { openstack_project::slave_template: install_users => false,ssh_key => \\"\${SSH_KEYS}\\" }"
 echo HostKey /etc/ssh/ssh_host_ecdsa_key >> /etc/ssh/sshd_config
 reboot
 EOF

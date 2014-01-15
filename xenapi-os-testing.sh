@@ -97,6 +97,8 @@ EOF
 done
 
 remote-bash jenkins@$IP << EOF
+set -eux
+
 # These came from the Readme
 export REPO_URL=https://review.openstack.org/p
 export ZUUL_URL=/home/jenkins/workspace-cache

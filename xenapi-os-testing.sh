@@ -82,14 +82,29 @@ cd /opt/nodepool-scripts && ./prepare_node_devstack.sh trialnode
 cd
 git clone https://github.com/matelakat/devstack-gate -b xenserver-integration
 
+# These came from the Readme
+export REPO_URL=https://review.openstack.org/p
+export ZUUL_URL=/home/jenkins/workspace-cache
+export ZUUL_REF=HEAD
+export WORKSPACE=/home/jenkins/workspace/testing
+mkdir -p $WORKSPACE
+
+export ZUUL_PROJECT=openstack/nova
+export ZUUL_BRANCH=master
+
+git clone $REPO_URL/$ZUUL_PROJECT $ZUUL_URL/$ZUUL_PROJECT
+cd $ZUUL_URL/$ZUUL_PROJECT
+git checkout remotes/origin/$ZUUL_BRANCH
+
+cd $WORKSPACE
+git clone --depth 1 $REPO_URL/openstack-infra/devstack-gate
+
+# Values from the job template
 export PYTHONUNBUFFERED=true
 export DEVSTACK_GATE_TEMPEST=1
 export DEVSTACK_GATE_TEMPEST_FULL=1
 export DEVSTACK_GATE_VIRT_DRIVER=xenapi
-export BRANCH_OVERRIDE={branch-override}
-if [ "$BRANCH_OVERRIDE" != "default" ] ; then
-    export ZUUL_BRANCH=$BRANCH_OVERRIDE
-fi
+
 cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 ./safe-devstack-vm-gate-wrap.sh
 EOF

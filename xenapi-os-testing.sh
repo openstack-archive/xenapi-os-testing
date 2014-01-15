@@ -102,7 +102,7 @@ cd \$ZUUL_URL/\$ZUUL_PROJECT
 git checkout remotes/origin/\$ZUUL_BRANCH
 
 cd \$WORKSPACE
-git clone --depth 1 \$REPO_URL/openstack-infra/devstack-gate
+git clone https://github.com/matelakat/devstack-gate -b xenserver-integration
 
 # Values from the job template
 export PYTHONUNBUFFERED=true

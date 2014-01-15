@@ -87,17 +87,17 @@ export REPO_URL=https://review.openstack.org/p
 export ZUUL_URL=/home/jenkins/workspace-cache
 export ZUUL_REF=HEAD
 export WORKSPACE=/home/jenkins/workspace/testing
-mkdir -p $WORKSPACE
+mkdir -p \$WORKSPACE
 
 export ZUUL_PROJECT=openstack/nova
 export ZUUL_BRANCH=master
 
-git clone $REPO_URL/$ZUUL_PROJECT $ZUUL_URL/$ZUUL_PROJECT
-cd $ZUUL_URL/$ZUUL_PROJECT
-git checkout remotes/origin/$ZUUL_BRANCH
+git clone \$REPO_URL/\$ZUUL_PROJECT \$ZUUL_URL/\$ZUUL_PROJECT
+cd \$ZUUL_URL/\$ZUUL_PROJECT
+git checkout remotes/origin/\$ZUUL_BRANCH
 
-cd $WORKSPACE
-git clone --depth 1 $REPO_URL/openstack-infra/devstack-gate
+cd \$WORKSPACE
+git clone --depth 1 \$REPO_URL/openstack-infra/devstack-gate
 
 # Values from the job template
 export PYTHONUNBUFFERED=true

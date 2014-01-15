@@ -68,8 +68,6 @@ apt-get -qy install git python-pip curl
 
 SSH_KEYS="\$(cat .ssh/authorized_keys)"
 
-mkdir src
-cd src
 git clone https://review.openstack.org/p/openstack-infra/config
 
 config/install_puppet.sh

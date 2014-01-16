@@ -32,6 +32,8 @@ done
 
 cd xenapi-in-the-cloud
 
+nova delete "$IMAGE" || true
+
 nova boot \
     --poll \
     --image "$IMAGE" \

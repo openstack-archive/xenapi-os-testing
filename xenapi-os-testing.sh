@@ -6,7 +6,7 @@ XENSERVER_PASSWORD="password"
 APPLIANCE_URL="http://downloads.vmd.citrix.com/OpenStack/xenapi-in-the-cloud-appliances/master.xva"
 KEY_NAME="matekey"
 KEY_PATH="$(pwd)/../xenapi-in-the-cloud/$KEY_NAME.pem"
-INSTANCE_NAME="xsdevstack"
+INSTANCE_NAME="$1"
 
 # Use this configuration to start with a cloud image
 #IMAGE="62df001e-87ee-407c-b042-6f4e13f5d7e1"

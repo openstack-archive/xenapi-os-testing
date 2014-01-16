@@ -89,6 +89,7 @@ mv scripts /opt/nodepool-scripts
 chmod -R a+rx /opt/nodepool-scripts
 cd /opt/nodepool-scripts
 
+cd /root
 config/install_puppet.sh
 config/install_modules.sh
 puppet apply --modulepath=/root/config/modules:/etc/puppet/modules -e "class { openstack_project::slave_template: install_users => false,ssh_key => \\"\${SSH_KEYS}\\" }"

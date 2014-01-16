@@ -6,6 +6,7 @@ XENSERVER_PASSWORD="password"
 APPLIANCE_URL="http://downloads.vmd.citrix.com/OpenStack/xenapi-in-the-cloud-appliances/master.xva"
 KEY_NAME="matekey"
 KEY_PATH="$(pwd)/../xenapi-in-the-cloud/$KEY_NAME.pem"
+INSTANCE_NAME="xsdevstack"
 
 # Use this configuration to start with a cloud image
 #IMAGE="62df001e-87ee-407c-b042-6f4e13f5d7e1"
@@ -32,15 +33,15 @@ done
 
 cd xenapi-in-the-cloud
 
-nova delete "$IMAGE" || true
+nova delete "$INSTANCE_NAME" || true
 
 nova boot \
     --poll \
     --image "$IMAGE" \
     --flavor "performance1-8" \
-    --key-name $KEY_NAME instance
+    --key-name $KEY_NAME $INSTANCE_NAME
 
-IP=$(./get-ip-address-of-instance.sh instance)
+IP=$(./get-ip-address-of-instance.sh $INSTANCE_NAME)
 SSH_PARAMS="-i $KEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 if [ "0" = "$IMAGE_CONTAINS_XENSERVER" ]; then

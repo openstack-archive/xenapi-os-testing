@@ -9,11 +9,11 @@ KEY_PATH="$(pwd)/../xenapi-in-the-cloud/$KEY_NAME.pem"
 
 # Use this configuration to start with a cloud image
 #IMAGE="62df001e-87ee-407c-b042-6f4e13f5d7e1"
-#IS_RAW_IMAGE=1
+#IMAGE_CONTAINS_XENSERVER=0
 
 # If you already have a xenserver image, use that:
 IMAGE="xssnap"
-IS_RAW_IMAGE=0
+IMAGE_CONTAINS_XENSERVER=1
 
 # Download dependencies
 
@@ -41,7 +41,7 @@ nova boot \
 IP=$(./get-ip-address-of-instance.sh instance)
 SSH_PARAMS="-i $KEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
-if [ "1" = "$IS_RAW_IMAGE" ]; then
+if [ "0" = "$IMAGE_CONTAINS_XENSERVER" ]; then
     ssh \
         $SSH_PARAMS \
         root@$IP mkdir -p /opt/xenapi-in-the-cloud

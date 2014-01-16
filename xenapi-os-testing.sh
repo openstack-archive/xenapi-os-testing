@@ -72,7 +72,7 @@ ssh-add $KEY_PATH
 
 
 set +e
-remote-bash root@$IP << EOF
+remote-bash-agentfw root@$IP << EOF
 set -eux
 apt-get update
 
@@ -94,8 +94,12 @@ config/install_puppet.sh
 config/install_modules.sh
 puppet apply --modulepath=/root/config/modules:/etc/puppet/modules -e "class { openstack_project::slave_template: install_users => false,ssh_key => \\"\${SSH_KEYS}\\" }"
 echo HostKey /etc/ssh/ssh_host_ecdsa_key >> /etc/ssh/sshd_config
-reboot
+sudo -u jenkins -i /opt/nodepool-scripts/prepare_devstack.sh
+rm -f /root/done.stamp
+sync
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 halt -p
 EOF
+
 
 RESULT="$?"
 
@@ -103,6 +107,9 @@ if ! [ "$RESULT" = "0" ]; then
     ssh-agent -k
     exit $RESULT
 fi
+
+ssh-agent -k
+exit 0
 
 # Wait until the box comes back
 while true; do
@@ -120,7 +127,7 @@ remote-bash jenkins@$IP << EOF
 set -eux
 
 # This is originally executed by nodepool
-/opt/nodepool-scripts/prepare_devstack.sh
+
 
 # These came from the Readme
 export REPO_URL=https://review.openstack.org/p

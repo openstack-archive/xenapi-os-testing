@@ -82,6 +82,13 @@ SSH_KEYS="\$(cat .ssh/authorized_keys)"
 
 git clone https://review.openstack.org/p/openstack-infra/config
 
+# Copy nodepool scripts
+mkdir -p scripts
+cp config/modules/openstack_project/files/nodepool/scripts/* scripts/
+mv scripts /opt/nodepool-scripts
+chmod -R a+rx /opt/nodepool-scripts
+cd /opt/nodepool-scripts
+
 config/install_puppet.sh
 config/install_modules.sh
 puppet apply --modulepath=/root/config/modules:/etc/puppet/modules -e "class { openstack_project::slave_template: install_users => false,ssh_key => \\"\${SSH_KEYS}\\" }"
@@ -110,6 +117,9 @@ done
 
 remote-bash jenkins@$IP << EOF
 set -eux
+
+# This is originally executed by nodepool
+/opt/nodepool-scripts/prepare_devstack.sh
 
 # These came from the Readme
 export REPO_URL=https://review.openstack.org/p

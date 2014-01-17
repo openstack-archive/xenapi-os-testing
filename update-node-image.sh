@@ -39,9 +39,9 @@ ssh-add $KEY_PATH
 
 {
     cat << EOF
-    set -eux
-    mkdir -p /opt/xenapi-in-the-cloud
-    dd of=/opt/xenapi-in-the-cloud/xenapi-in-rs.sh
+set -eux
+mkdir -p /opt/xenapi-in-the-cloud
+dd of=/opt/xenapi-in-the-cloud/xenapi-in-rs.sh
 EOF
     cat xenapi-in-rs.sh
 } | remote-bash root@IP

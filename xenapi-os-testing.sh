@@ -9,12 +9,12 @@ KEY_PATH="$(pwd)/../xenapi-in-the-cloud/$KEY_NAME.pem"
 INSTANCE_NAME="$1"
 
 # Use this configuration to start with a cloud image
-#IMAGE="62df001e-87ee-407c-b042-6f4e13f5d7e1"
-#IMAGE_CONTAINS_XENSERVER=0
+IMAGE="62df001e-87ee-407c-b042-6f4e13f5d7e1"
+IMAGE_CONTAINS_XENSERVER=0
 
 # If you already have a xenserver image, use that:
-IMAGE="xssnap"
-IMAGE_CONTAINS_XENSERVER=1
+# IMAGE="xssnap"
+# IMAGE_CONTAINS_XENSERVER=1
 
 # Download dependencies
 

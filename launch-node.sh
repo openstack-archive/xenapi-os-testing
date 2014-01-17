@@ -6,7 +6,7 @@ THISDIR=$(dirname $(readlink -f $0))
 KEY_NAME="matekey"
 KEY_PATH="$(pwd)/../xenapi-in-the-cloud/$KEY_NAME.pem"
 IMAGE="node"
-INSTANCE_NAME="$2"
+INSTANCE_NAME="$1"
 
 . $THISDIR/functions
 

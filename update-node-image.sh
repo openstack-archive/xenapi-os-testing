@@ -37,7 +37,7 @@ eval $(ssh-agent)
 
 ssh-add $KEY_PATH
 
-while ! echo "true" | remote-bash root@IP; do
+while ! echo "true" | remote-bash root@$IP; do
     sleep 1
 done
 

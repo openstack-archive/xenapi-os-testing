@@ -48,9 +48,9 @@ mkdir -p /opt/xenapi-in-the-cloud
 dd of=/opt/xenapi-in-the-cloud/xenapi-in-rs.sh
 EOF
     cat xenapi-in-rs.sh
-} | remote-bash root@IP
+} | remote-bash root@$IP
 
-remote-bash root@IP << EOF
+remote-bash root@$IP << EOF
 bash /opt/xenapi-in-the-cloud/xenapi-in-rs.sh $XENSERVER_PASSWORD $APPLIANCE_URL
 EOF
 

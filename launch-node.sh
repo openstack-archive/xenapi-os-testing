@@ -65,6 +65,8 @@ git checkout remotes/origin/\$ZUUL_BRANCH
 cd \$WORKSPACE
 git clone https://github.com/matelakat/devstack-gate -b xenserver-integration
 
+( cd /opt/stack/new && git clone https://github.com/matelakat/devstack-gate -b xenserver-integration )
+
 # Values from the job template
 export PYTHONUNBUFFERED=true
 export DEVSTACK_GATE_TEMPEST=1

@@ -31,8 +31,19 @@ eval $(ssh-agent)
 ssh-add $KEY_PATH
 
 set +x
-remote-bash jenkins@$IP << EOF
+
+{
+    echo "set -eux"
+    remote-bash-print rembash
+    cat << EOF
+# Create a separate network for VM traffic (Move this logic to appliance)
+rembash root@192.168.33.2 << ONXS
 set -eux
+vmnet=\\\$(xe network-create name-label=vmnet)
+app=\\\$(xe vm-list name-label=Appliance --minimal)
+vif=\\\$(xe vif-create vm-uuid=\\\$app network-uuid=\\\$vmnet device=3)
+xe vif-plug uuid=\\\$vif
+ONXS
 
 # These came from the Readme
 export REPO_URL=https://review.openstack.org/p
@@ -61,6 +72,7 @@ export DEVSTACK_GATE_VIRT_DRIVER=xenapi
 cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 ./safe-devstack-vm-gate-wrap.sh
 EOF
+} | remote-bash-agentfw jenkins@$IP
 
 RESULT="$?"
 set -x

@@ -56,7 +56,7 @@ export WORKSPACE=/home/jenkins/workspace/testing
 
 # Check out a custom branch
 (
-    cd cd workspace-cache/devstack-gate/
+    cd workspace-cache/devstack-gate/
     git remote add mate https://github.com/matelakat/devstack-gate
     git fetch mate
     git checkout xenserver-integration

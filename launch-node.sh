@@ -53,6 +53,14 @@ export REPO_URL=https://review.openstack.org/p
 export ZUUL_URL=/home/jenkins/workspace-cache
 export ZUUL_REF=HEAD
 export WORKSPACE=/home/jenkins/workspace/testing
+
+# Check out a custom branch
+(
+    cd cd workspace-cache/devstack-gate/
+    git remote add mate https://github.com/matelakat/devstack-gate
+    git fetch mate
+    git checkout xenserver-integration
+)
 mkdir -p \$WORKSPACE
 
 export ZUUL_PROJECT=openstack/nova
@@ -65,7 +73,7 @@ git checkout remotes/origin/\$ZUUL_BRANCH
 cd \$WORKSPACE
 git clone https://github.com/matelakat/devstack-gate -b xenserver-integration
 
-( sudo mkdir -p /opt/stack/new && sudo chown -R jenkins:jenkins /opt/stack/new && cd /opt/stack/new && git clone https://github.com/matelakat/devstack-gate -b xenserver-integration )
+#( sudo mkdir -p /opt/stack/new && sudo chown -R jenkins:jenkins /opt/stack/new && cd /opt/stack/new && git clone https://github.com/matelakat/devstack-gate -b xenserver-integration )
 
 # Values from the job template
 export PYTHONUNBUFFERED=true

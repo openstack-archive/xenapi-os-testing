@@ -48,6 +48,8 @@ ONXS
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1
 
+sudo pip install -i https://pypi.python.org/simple/ XenAPI
+
 # These came from the Readme
 export REPO_URL=https://review.openstack.org/p
 export ZUUL_URL=/home/jenkins/workspace-cache
@@ -69,6 +71,10 @@ export ZUUL_BRANCH=master
 git clone \$REPO_URL/\$ZUUL_PROJECT \$ZUUL_URL/\$ZUUL_PROJECT
 cd \$ZUUL_URL/\$ZUUL_PROJECT
 git checkout remotes/origin/\$ZUUL_BRANCH
+
+tar -czf - -C /home/jenkins/workspace-cache/nova/plugins/xenserver/xenapi/etc/xapi.d/plugins/ ./ |
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 \
+    'tar -xzf - -C /etc/xapi.d/plugins/ && chmod a+x /etc/xapi.d/plugins/*'
 
 cd \$WORKSPACE
 git clone https://github.com/matelakat/devstack-gate -b xenserver-integration

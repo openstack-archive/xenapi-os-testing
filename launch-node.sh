@@ -12,6 +12,8 @@ INSTANCE_NAME="$1"
 
 get_dependencies
 
+nova delete "$INSTANCE_NAME" || true
+
 cd xenapi-in-the-cloud
 
 nova boot \
@@ -24,8 +26,11 @@ IP=$(./get-ip-address-of-instance.sh $INSTANCE_NAME)
 
 ./wait-until-done.sh jenkins@$IP $KEY_PATH
 
-set +x
+eval $(ssh-agent)
 
+ssh-add $KEY_PATH
+
+set +x
 remote-bash jenkins@$IP << EOF
 set -eux
 

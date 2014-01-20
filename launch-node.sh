@@ -45,6 +45,9 @@ vif=\\\$(xe vif-create vm-uuid=\\\$app network-uuid=\\\$vmnet device=3)
 xe vif-plug uuid=\\\$vif
 ONXS
 
+# For development:
+export SKIP_DEVSTACK_GATE_PROJECT=1
+
 # These came from the Readme
 export REPO_URL=https://review.openstack.org/p
 export ZUUL_URL=/home/jenkins/workspace-cache

@@ -32,6 +32,8 @@ ssh-add $KEY_PATH
 
 set +x
 
+SSH_OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
 {
     echo "set -eux"
     cat << EOF
@@ -63,7 +65,7 @@ cd \$ZUUL_URL/\$ZUUL_PROJECT
 git checkout remotes/origin/\$ZUUL_BRANCH
 
 tar -czf - -C /home/jenkins/workspace-cache/nova/plugins/xenserver/xenapi/etc/xapi.d/plugins/ ./ |
-    sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 \
+    sudo -u domzero ssh $SSH_OPTS root@192.168.33.2 \
     'tar -xzf - -C /etc/xapi.d/plugins/ && chmod a+x /etc/xapi.d/plugins/*'
 
 cd \$WORKSPACE

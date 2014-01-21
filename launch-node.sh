@@ -37,9 +37,16 @@ SSH_DOM0="sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=
 {
     echo "set -eux"
     cat << EOF
+# Get some parameters
+APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal)
+
+# Create a vm network
+VMNET=\$($SSH_DOM0 xe network-create name-label=vmnet)
+VMVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$VMNET device=3)
+$SSH_DOM0 xe vif-plug uuid=\$VMVIF
+
 # Create pub network
 PUBNET=\$($SSH_DOM0 xe network-create name-label=pubnet)
-APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal)
 PUBVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$PUBNET device=4)
 $SSH_DOM0 xe vif-plug uuid=\$PUBVIF
 

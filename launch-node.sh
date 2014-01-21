@@ -35,8 +35,8 @@ set +x
 SSH_DOM0="sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2"
 
 {
-    echo "set -eux"
     cat << EOF
+set -eux
 # Get some parameters
 APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal < /dev/null)
 
@@ -96,7 +96,9 @@ export DEVSTACK_GATE_VIRT_DRIVER=xenapi
 cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 ./safe-devstack-vm-gate-wrap.sh
 EOF
-} | remote-bash jenkins@$IP
+} | remote-bash jenkins@$IP 'dd of=testscript.sh'
+
+remote-bash jenkins@$IP 'bash testscript.sh < /dev/null' < /dev/null
 
 RESULT="$?"
 set -x

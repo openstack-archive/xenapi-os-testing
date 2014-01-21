@@ -32,9 +32,17 @@ ssh-add $KEY_PATH
 
 set +x
 
+SSH_DOM0="sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2"
+
 {
     echo "set -eux"
     cat << EOF
+# Create pub network
+PUBNET=\$($SSH_DOM0 xe network-create name-label=pubnet)
+APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal)
+PUBVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$PUBNET device=4)
+$SSH_DOM0 xe vif-plug uuid=\$PUBVIF
+
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1
 
@@ -63,7 +71,7 @@ cd \$ZUUL_URL/\$ZUUL_PROJECT
 git checkout remotes/origin/\$ZUUL_BRANCH
 
 tar -czf - -C /home/jenkins/workspace-cache/nova/plugins/xenserver/xenapi/etc/xapi.d/plugins/ ./ |
-    sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 \
+    $SSH_DOM0 \
     'tar -xzf - -C /etc/xapi.d/plugins/ && chmod a+x /etc/xapi.d/plugins/*'
 
 cd \$WORKSPACE

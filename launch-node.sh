@@ -34,7 +34,6 @@ set +x
 
 {
     echo "set -eux"
-    remote-bash-print rembash
     cat << EOF
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1
@@ -64,7 +63,7 @@ cd \$ZUUL_URL/\$ZUUL_PROJECT
 git checkout remotes/origin/\$ZUUL_BRANCH
 
 tar -czf - -C /home/jenkins/workspace-cache/nova/plugins/xenserver/xenapi/etc/xapi.d/plugins/ ./ |
-    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 \
+    sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 \
     'tar -xzf - -C /etc/xapi.d/plugins/ && chmod a+x /etc/xapi.d/plugins/*'
 
 cd \$WORKSPACE
@@ -82,7 +81,7 @@ export DEVSTACK_GATE_VIRT_DRIVER=xenapi
 cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 ./safe-devstack-vm-gate-wrap.sh
 EOF
-} | remote-bash-agentfw jenkins@$IP
+} | remote-bash jenkins@$IP
 
 RESULT="$?"
 set -x

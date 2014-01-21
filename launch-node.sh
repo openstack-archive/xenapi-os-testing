@@ -33,22 +33,23 @@ ssh-add $KEY_PATH
 set +x
 
 SSH_DOM0="sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2"
+FEED_WITH_NOTING="< /dev/null"
 
 {
     cat << EOF
 set -eux
 # Get some parameters
-APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal)
+APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal $FEED_WITH_NOTING)
 
 # Create a vm network
-VMNET=\$($SSH_DOM0 xe network-create name-label=vmnet)
-VMVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$VMNET device=3)
-$SSH_DOM0 xe vif-plug uuid=\$VMVIF
+VMNET=\$($SSH_DOM0 xe network-create name-label=vmnet $FEED_WITH_NOTING)
+VMVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$VMNET device=3 $FEED_WITH_NOTING)
+$SSH_DOM0 xe vif-plug uuid=\$VMVIF $FEED_WITH_NOTING
 
 # Create pub network
-PUBNET=\$($SSH_DOM0 xe network-create name-label=pubnet)
-PUBVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$PUBNET device=4)
-$SSH_DOM0 xe vif-plug uuid=\$PUBVIF
+PUBNET=\$($SSH_DOM0 xe network-create name-label=pubnet $FEED_WITH_NOTING)
+PUBVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$PUBNET device=4 $FEED_WITH_NOTING)
+$SSH_DOM0 xe vif-plug uuid=\$PUBVIF $FEED_WITH_NOTING
 
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1
@@ -96,9 +97,7 @@ export DEVSTACK_GATE_VIRT_DRIVER=xenapi
 cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 ./safe-devstack-vm-gate-wrap.sh
 EOF
-} | remote-bash jenkins@$IP 'dd of=testscript.sh'
-
-remote-bash jenkins@$IP 'bash testscript.sh < /dev/null' < /dev/null
+} | remote-bash jenkins@$IP
 
 RESULT="$?"
 set -x

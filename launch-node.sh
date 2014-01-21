@@ -38,17 +38,17 @@ SSH_DOM0="sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=
     echo "set -eux"
     cat << EOF
 # Get some parameters
-APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal)
+APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal < /dev/null)
 
 # Create a vm network
-VMNET=\$($SSH_DOM0 xe network-create name-label=vmnet)
-VMVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$VMNET device=3)
-$SSH_DOM0 xe vif-plug uuid=\$VMVIF
+VMNET=\$($SSH_DOM0 xe network-create name-label=vmnet </dev/null)
+VMVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$VMNET device=3 </dev/null)
+$SSH_DOM0 xe vif-plug uuid=\$VMVIF < /dev/null
 
 # Create pub network
-PUBNET=\$($SSH_DOM0 xe network-create name-label=pubnet)
-PUBVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$PUBNET device=4)
-$SSH_DOM0 xe vif-plug uuid=\$PUBVIF
+PUBNET=\$($SSH_DOM0 xe network-create name-label=pubnet </dev/null)
+PUBVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$PUBNET device=4 </dev/null)
+$SSH_DOM0 xe vif-plug uuid=\$PUBVIF </dev/null
 
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1

@@ -36,15 +36,6 @@ set +x
     echo "set -eux"
     remote-bash-print rembash
     cat << EOF
-# Create a separate network for VM traffic (Move this logic to appliance)
-rembash root@192.168.33.2 << ONXS
-set -eux
-vmnet=\\\$(xe network-create name-label=vmnet)
-app=\\\$(xe vm-list name-label=Appliance --minimal)
-vif=\\\$(xe vif-create vm-uuid=\\\$app network-uuid=\\\$vmnet device=3)
-xe vif-plug uuid=\\\$vif
-ONXS
-
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1
 

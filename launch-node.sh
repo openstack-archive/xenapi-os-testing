@@ -82,6 +82,18 @@ tar -czf - -C /home/jenkins/workspace-cache/nova/plugins/xenserver/xenapi/etc/xa
     $SSH_DOM0 \
     'tar -xzf - -C /etc/xapi.d/plugins/ && chmod a+x /etc/xapi.d/plugins/*'
 
+sudo iptables -A INPUT -i eth2 -s 192.168.32.0/24 -j ACCEPT
+
+(
+    cd /home/jenkins/workspace-cache/devstack
+    {
+        echo "set -eux"
+        cat tools/xen/functions
+        echo "create_directory_for_images"
+        echo "create_directory_for_kernels"
+    } | $SSH_DOM0
+)
+
 cd \$WORKSPACE
 git clone https://github.com/matelakat/devstack-gate -b xenserver-integration
 

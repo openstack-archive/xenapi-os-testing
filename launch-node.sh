@@ -51,6 +51,12 @@ PUBNET=\$($SSH_DOM0 xe network-create name-label=pubnet $FEED_WITH_NOTING)
 PUBVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$PUBNET device=4 $FEED_WITH_NOTING)
 $SSH_DOM0 xe vif-plug uuid=\$PUBVIF $FEED_WITH_NOTING
 
+# Hack iSCSI SR
+$SSH_DOM0 << SRHACK
+set -eux
+sed -ie "s/'phy'/'aio'/g" /opt/xensource/sm/ISCSISR.py
+SRHACK
+
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1
 

@@ -82,7 +82,8 @@ tar -czf - -C /home/jenkins/workspace-cache/nova/plugins/xenserver/xenapi/etc/xa
     $SSH_DOM0 \
     'tar -xzf - -C /etc/xapi.d/plugins/ && chmod a+x /etc/xapi.d/plugins/*'
 
-sudo iptables -A INPUT -i eth2 -s 192.168.32.0/24 -j ACCEPT
+# Insert a rule as the first position - allow all traffic
+sudo iptables -I INPUT 1 -i eth2 -s 192.168.33.0/24 -j ACCEPT
 
 (
     cd /home/jenkins/workspace-cache/devstack

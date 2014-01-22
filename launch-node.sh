@@ -82,7 +82,8 @@ tar -czf - -C /home/jenkins/workspace-cache/nova/plugins/xenserver/xenapi/etc/xa
     $SSH_DOM0 \
     'tar -xzf - -C /etc/xapi.d/plugins/ && chmod a+x /etc/xapi.d/plugins/*'
 
-# Insert a rule as the first position - allow all traffic
+# Insert a rule as the first position - allow all traffic on the mgmt interface
+# Other rules are inserted by config/modules/iptables/templates/rules.erb
 sudo iptables -I INPUT 1 -i eth2 -s 192.168.33.0/24 -j ACCEPT
 
 (

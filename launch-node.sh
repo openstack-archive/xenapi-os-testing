@@ -33,23 +33,23 @@ ssh-add $KEY_PATH
 set +x
 
 SSH_DOM0="sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2"
-FEED_WITH_NOTING="< /dev/null"
+FEED_WITH_NOTHING="< /dev/null"
 
 {
     cat << EOF
 set -eux
 # Get some parameters
-APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal $FEED_WITH_NOTING)
+APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal $FEED_WITH_NOTHING)
 
 # Create a vm network
-VMNET=\$($SSH_DOM0 xe network-create name-label=vmnet $FEED_WITH_NOTING)
-VMVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$VMNET device=3 $FEED_WITH_NOTING)
-$SSH_DOM0 xe vif-plug uuid=\$VMVIF $FEED_WITH_NOTING
+VMNET=\$($SSH_DOM0 xe network-create name-label=vmnet $FEED_WITH_NOTHING)
+VMVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$VMNET device=3 $FEED_WITH_NOTHING)
+$SSH_DOM0 xe vif-plug uuid=\$VMVIF $FEED_WITH_NOTHING
 
 # Create pub network
-PUBNET=\$($SSH_DOM0 xe network-create name-label=pubnet $FEED_WITH_NOTING)
-PUBVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$PUBNET device=4 $FEED_WITH_NOTING)
-$SSH_DOM0 xe vif-plug uuid=\$PUBVIF $FEED_WITH_NOTING
+PUBNET=\$($SSH_DOM0 xe network-create name-label=pubnet $FEED_WITH_NOTHING)
+PUBVIF=\$($SSH_DOM0 xe vif-create vm-uuid=\$APP network-uuid=\$PUBNET device=4 $FEED_WITH_NOTHING)
+$SSH_DOM0 xe vif-plug uuid=\$PUBVIF $FEED_WITH_NOTHING
 
 # Hack iSCSI SR
 $SSH_DOM0 << SRHACK
@@ -58,10 +58,10 @@ sed -ie "s/'phy'/'aio'/g" /opt/xensource/sm/ISCSISR.py
 SRHACK
 
 # Add a separate disk
-SR=\$($SSH_DOM0 xe sr-list type=ext  --minimal $FEED_WITH_NOTING)
+SR=\$($SSH_DOM0 xe sr-list type=ext  --minimal $FEED_WITH_NOTHING)
 VDI=\$($SSH_DOM0 xe vdi-create name-label=disk-for-volumes virtual-size=10GiB sr-uuid=\$SR type=user $FEED_WITH_NOTHING)
-VBD=\$($SSH_DOM0 xe vbd-create vm-uuid=\$APP vdi-uuid=\$VDI device=1 $FEED_WITH_NOTING)
-$SSH_DOM0 xe vbd-plug uuid=\$VBD $FEED_WITH_NOTING
+VBD=\$($SSH_DOM0 xe vbd-create vm-uuid=\$APP vdi-uuid=\$VDI device=1 $FEED_WITH_NOTHING)
+$SSH_DOM0 xe vbd-plug uuid=\$VBD $FEED_WITH_NOTHING
 
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1

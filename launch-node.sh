@@ -57,6 +57,12 @@ set -eux
 sed -ie "s/'phy'/'aio'/g" /opt/xensource/sm/ISCSISR.py
 SRHACK
 
+# Add a separate disk
+SR=\$($SSH_DOM0 xe sr-list type=ext  --minimal $FEED_WITH_NOTING)
+VDI=\$($SSH_DOM0 xe vdi-create name-label=disk-for-volumes virtual-size=10GiB sr-uuid=\$SR type=user $FEED_WITH_NOTHING)
+VBD=\$($SSH_DOM0 xe vbd-create vm-uuid=\$APP vdi-uuid=\$VDI device=1 $FEED_WITH_NOTING)
+$SSH_DOM0 xe vbd-plug uuid=\$VBD $FEED_WITH_NOTING
+
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1
 

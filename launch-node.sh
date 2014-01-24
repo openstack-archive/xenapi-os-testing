@@ -57,6 +57,11 @@ set -eux
 sed -ie "s/'phy'/'aio'/g" /opt/xensource/sm/ISCSISR.py
 SRHACK
 
+# This is important, otherwise dhcp server will fail
+for dev in eth0 eth1 eth2 eth3 eth4; do
+    sudo ethtool -K \$dev tx off
+done
+
 # Add a separate disk
 SR=\$($SSH_DOM0 xe sr-list type=ext  --minimal $FEED_WITH_NOTHING)
 VDI=\$($SSH_DOM0 xe vdi-create name-label=disk-for-volumes virtual-size=10GiB sr-uuid=\$SR type=user $FEED_WITH_NOTHING)

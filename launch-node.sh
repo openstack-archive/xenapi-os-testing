@@ -58,6 +58,7 @@ sed -ie "s/'phy'/'aio'/g" /opt/xensource/sm/ISCSISR.py
 SRHACK
 
 # This is important, otherwise dhcp client will fail
+sudo apt-get -qy install ethtool
 for dev in eth0 eth1 eth2 eth3 eth4; do
     sudo ethtool -K \$dev tx off
 done

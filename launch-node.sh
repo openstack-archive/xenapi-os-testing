@@ -125,7 +125,7 @@ export DEVSTACK_GATE_TEMPEST_FULL=1
 #export DEVSTACK_GATE_TEMPEST_FULL=0
 export DEVSTACK_GATE_VIRT_DRIVER=xenapi
 # Set gate timeout to 2 hours
-export DEVSTACK_GATE_TIMEOUT=120
+export DEVSTACK_GATE_TIMEOUT=240
 
 cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 ./safe-devstack-vm-gate-wrap.sh

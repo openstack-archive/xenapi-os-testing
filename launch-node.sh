@@ -103,7 +103,7 @@ tar -czf - -C /home/jenkins/workspace-cache/nova/plugins/xenserver/xenapi/etc/xa
 # Console log
 tar -czf - -C /home/jenkins/workspace-cache/nova/tools/xenserver/ rotate_xen_guest_logs.sh |
     $SSH_DOM0 \
-    'tar -xzf - -C /root/ && chmod +x /root/rotate_xen_guest_logs.sh'
+    'tar -xzf - -C /root/ && chmod +x /root/rotate_xen_guest_logs.sh && mkdir -p /var/log/xen/guest'
 $SSH_DOM0 crontab - << CRONTAB
 * * * * * /root/rotate_xen_guest_logs.sh
 CRONTAB

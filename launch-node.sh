@@ -95,9 +95,18 @@ git clone \$REPO_URL/\$ZUUL_PROJECT \$ZUUL_URL/\$ZUUL_PROJECT
 cd \$ZUUL_URL/\$ZUUL_PROJECT
 git checkout remotes/origin/\$ZUUL_BRANCH
 
+# Plugins
 tar -czf - -C /home/jenkins/workspace-cache/nova/plugins/xenserver/xenapi/etc/xapi.d/plugins/ ./ |
     $SSH_DOM0 \
     'tar -xzf - -C /etc/xapi.d/plugins/ && chmod a+x /etc/xapi.d/plugins/*'
+
+# Console log
+tar -czf - -C /home/jenkins/workspace-cache/nova/tools/xenserver/ rotate_xen_guest_logs.sh |
+    $SSH_DOM0 \
+    'tar -xzf - -C /root/ && chmod +x /root/rotate_xen_guest_logs.sh'
+$SSH_DOM0 crontab - << CRONTAB
+* * * * * /root/rotate_xen_guest_logs.sh
+CRONTAB
 
 # Insert a rule as the first position - allow all traffic on the mgmt interface
 # Other rules are inserted by config/modules/iptables/templates/rules.erb

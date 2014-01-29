@@ -5,7 +5,7 @@ set -eux
 THISDIR=$(dirname $(readlink -f $0))
 
 XENSERVER_PASSWORD="password"
-APPLIANCE_URL="http://downloads.vmd.citrix.com/OpenStack/xenapi-in-the-cloud-appliances/master.xva"
+APPLIANCE_URL="http://downloads.vmd.citrix.com/OpenStack/xenapi-in-the-cloud-appliances/1.0.0.xva"
 KEY_NAME="matekey"
 KEY_PATH="$(pwd)/../xenapi-in-the-cloud/$KEY_NAME.pem"
 INSTANCE_NAME="$1"

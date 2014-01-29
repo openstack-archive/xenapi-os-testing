@@ -84,11 +84,8 @@ echo HostKey /etc/ssh/ssh_host_ecdsa_key >> /etc/ssh/sshd_config
 sudo -u jenkins -i /opt/nodepool-scripts/prepare_devstack.sh
 rm -f $STAMP_FILE
 sync
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 halt -p
+sleep 5
 EOF
-
-# Wait until machine is halted
-sleep 30
 
 nova image-create --poll $INSTANCE_NAME $NODE_IMAGE
 nova delete $INSTANCE_NAME

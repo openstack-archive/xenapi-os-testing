@@ -3,10 +3,10 @@
 set -eux
 
 THISDIR=$(dirname $(readlink -f $0))
-KEY_NAME="matekey"
-KEY_PATH="$(pwd)/../xenapi-in-the-cloud/$KEY_NAME.pem"
+KEY_NAME="$1"
+KEY_PATH="$2"
 IMAGE="node"
-INSTANCE_NAME="$1"
+INSTANCE_NAME="$3"
 
 . $THISDIR/functions
 

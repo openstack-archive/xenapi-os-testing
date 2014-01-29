@@ -24,7 +24,9 @@ nova boot \
 
 IP=$(./get-ip-address-of-instance.sh $INSTANCE_NAME)
 
+TSTAMP=$(date +%s)
 ./wait-until-done.sh jenkins@$IP $KEY_PATH
+echo "TIMETOBOOTFROMSNAPSHOT $(expr $(date +%s) - $TSTAMP)" >> timedata.log
 
 eval $(ssh-agent)
 

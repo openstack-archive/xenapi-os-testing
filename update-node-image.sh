@@ -54,7 +54,9 @@ remote-bash root@$IP << EOF
 bash /opt/xenapi-in-the-cloud/xenapi-in-rs.sh $XENSERVER_PASSWORD $APPLIANCE_URL
 EOF
 
+TSTAMP=$(date +%s)
 ./wait-until-done.sh $IP $KEY_PATH
+echo "TIMETOINSTALLXENSERVER $(expr $(date +%s) - $TSTAMP)" >> timedata.log
 
 # Use this key for jenkins
 SSH_PUBLIC_KEY=$(ssh-keygen -y -f $KEY_PATH)

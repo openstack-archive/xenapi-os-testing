@@ -6,9 +6,9 @@ THISDIR=$(dirname $(readlink -f $0))
 
 XENSERVER_PASSWORD="password"
 APPLIANCE_URL="http://downloads.vmd.citrix.com/OpenStack/xenapi-in-the-cloud-appliances/1.0.0.xva"
-KEY_NAME="matekey"
-KEY_PATH="$(pwd)/../xenapi-in-the-cloud/$KEY_NAME.pem"
-INSTANCE_NAME="$1"
+KEY_NAME="$1"
+KEY_PATH="$2"
+INSTANCE_NAME="$3"
 NODE_IMAGE="node"
 
 # Use this configuration to start with a cloud image

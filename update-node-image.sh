@@ -49,7 +49,7 @@ EOF
 } | remote-bash root@$IP
 
 remote-bash root@$IP << EOF
-bash /opt/xenapi-in-the-cloud/xenapi-in-rs.sh $XENSERVER_PASSWORD $APPLIANCE_URL
+bash /opt/xenapi-in-the-cloud/xenapi-in-rs.sh $XENSERVER_PASSWORD $APPLIANCE_URL Devstack
 EOF
 
 TSTAMP=$(date +%s)

@@ -18,9 +18,7 @@ IMAGE="62df001e-87ee-407c-b042-6f4e13f5d7e1"
 
 get_dependencies
 
-cd xenapi-in-the-cloud
-
-STAMP_FILE=$(./print-stamp-path.sh)
+STAMP_FILE=$(xitc-print-stamp-path)
 
 nova delete "$INSTANCE_NAME" || true
 nova image-delete "$NODE_IMAGE" || true
@@ -31,7 +29,7 @@ nova boot \
     --flavor "performance1-8" \
     --key-name $KEY_NAME $INSTANCE_NAME
 
-IP=$(./get-ip-address-of-instance.sh $INSTANCE_NAME)
+IP=$(xitc-get-ip-address-of-instance $INSTANCE_NAME)
 
 eval $(ssh-agent)
 
@@ -45,9 +43,9 @@ done
     cat << EOF
 set -eux
 mkdir -p /opt/xenapi-in-the-cloud
-dd of=/opt/xenapi-in-the-cloud/xenapi-in-rs.sh
+tar -xzf - -C /opt/xenapi-in-the-cloud
 EOF
-    cat xenapi-in-rs.sh
+    tar -czf - -C xenapi-in-the-cloud/scripts ./
 } | remote-bash root@$IP
 
 remote-bash root@$IP << EOF
@@ -55,7 +53,7 @@ bash /opt/xenapi-in-the-cloud/xenapi-in-rs.sh $XENSERVER_PASSWORD $APPLIANCE_URL
 EOF
 
 TSTAMP=$(date +%s)
-./wait-until-done.sh $IP $KEY_PATH
+xitc-wait-until-done $IP $KEY_PATH
 echo "TIMETOINSTALLXENSERVER $(expr $(date +%s) - $TSTAMP)" >> timedata.log
 
 # Use this key for jenkins

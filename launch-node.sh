@@ -14,18 +14,16 @@ get_dependencies
 
 nova delete "$INSTANCE_NAME" || true
 
-cd xenapi-in-the-cloud
-
 nova boot \
     --poll \
     --image "$IMAGE" \
     --flavor "performance1-8" \
     --key-name $KEY_NAME $INSTANCE_NAME
 
-IP=$(./get-ip-address-of-instance.sh $INSTANCE_NAME)
+IP=$(xitc-get-ip-address-of-instance $INSTANCE_NAME)
 
 TSTAMP=$(date +%s)
-./wait-until-done.sh jenkins@$IP $KEY_PATH
+xitc-wait-until-done jenkins@$IP $KEY_PATH
 echo "TIMETOBOOTFROMSNAPSHOT $(expr $(date +%s) - $TSTAMP)" >> timedata.log
 
 eval $(ssh-agent)

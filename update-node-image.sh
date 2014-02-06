@@ -5,7 +5,7 @@ set -eux
 THISDIR=$(dirname $(readlink -f $0))
 
 XENSERVER_PASSWORD="password"
-APPLIANCE_URL="http://downloads.vmd.citrix.com/OpenStack/xenapi-in-the-cloud-appliances/1.0.0.xva"
+APPLIANCE_URL="http://downloads.vmd.citrix.com/OpenStack/xenapi-in-the-cloud-appliances/1.0.1.xva"
 KEY_NAME="$1"
 KEY_PATH="$2"
 INSTANCE_NAME="$3"
@@ -49,7 +49,7 @@ EOF
 } | remote-bash root@$IP
 
 remote-bash root@$IP << EOF
-bash /opt/xenapi-in-the-cloud/xenapi-in-rs.sh $XENSERVER_PASSWORD $APPLIANCE_URL Devstack
+bash /opt/xenapi-in-the-cloud/convert_node_to_xenserver.sh $XENSERVER_PASSWORD $APPLIANCE_URL Devstack
 EOF
 
 TSTAMP=$(date +%s)

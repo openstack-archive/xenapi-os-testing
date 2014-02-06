@@ -10,6 +10,8 @@ KEY_NAME="$1"
 KEY_PATH="$2"
 INSTANCE_NAME="$3"
 NODE_IMAGE="node"
+FLAVOR="8GB Standard Instance"
+#FLAVOR="performance1-8"
 
 # Use this configuration to start with a cloud image
 IMAGE="62df001e-87ee-407c-b042-6f4e13f5d7e1"
@@ -26,7 +28,7 @@ nova image-delete "$NODE_IMAGE" || true
 nova boot \
     --poll \
     --image "$IMAGE" \
-    --flavor "performance1-8" \
+    --flavor "$FLAVOR" \
     --key-name $KEY_NAME $INSTANCE_NAME
 
 IP=$(xitc-get-ip-address-of-instance $INSTANCE_NAME)

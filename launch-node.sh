@@ -7,6 +7,8 @@ KEY_NAME="$1"
 KEY_PATH="$2"
 IMAGE="node"
 INSTANCE_NAME="$3"
+FLAVOR="8GB Standard Instance"
+#FLAVOR="performance1-8"
 
 . $THISDIR/functions
 
@@ -17,7 +19,7 @@ nova delete "$INSTANCE_NAME" || true
 nova boot \
     --poll \
     --image "$IMAGE" \
-    --flavor "performance1-8" \
+    --flavor "$FLAVOR" \
     --key-name $KEY_NAME $INSTANCE_NAME
 
 IP=$(xitc-get-ip-address-of-instance $INSTANCE_NAME)

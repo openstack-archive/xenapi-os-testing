@@ -7,8 +7,7 @@ KEY_NAME="$1"
 KEY_PATH="$2"
 IMAGE="node"
 INSTANCE_NAME="$3"
-FLAVOR="8GB Standard Instance"
-#FLAVOR="performance1-8"
+FLAVOR="$4"
 
 . $THISDIR/functions
 

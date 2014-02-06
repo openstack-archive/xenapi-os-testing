@@ -77,7 +77,7 @@ cd /opt/nodepool-scripts
 cd /root
 config/install_puppet.sh
 config/install_modules.sh
-puppet apply --modulepath=/root/config/modules:/etc/puppet/modules -e "class { openstack_project::single_use_slave: install_users => false,ssh_key => \\"${SSH_PUBLIC_KEY}\\" }"
+puppet apply --modulepath=/root/config/modules:/etc/puppet/modules -e "class { openstack_project::single_use_slave: sudo => true,bare => true, install_users => false,ssh_key => \\"${SSH_PUBLIC_KEY}\\" }"
 echo HostKey /etc/ssh/ssh_host_ecdsa_key >> /etc/ssh/sshd_config
 sudo -u jenkins -i /opt/nodepool-scripts/prepare_devstack.sh
 rm -f $STAMP_FILE

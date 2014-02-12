@@ -11,6 +11,7 @@ KEY_PATH="$2"
 INSTANCE_NAME="$3"
 NODE_IMAGE="node"
 FLAVOR="$4"
+APPLIANCE_NAME="Devstack"
 
 # Use this configuration to start with a cloud image
 IMAGE="62df001e-87ee-407c-b042-6f4e13f5d7e1"
@@ -50,7 +51,7 @@ EOF
 } | remote-bash root@$IP
 
 remote-bash root@$IP << EOF
-bash /opt/xenapi-in-the-cloud/convert_node_to_xenserver.sh $XENSERVER_PASSWORD $APPLIANCE_URL Devstack
+bash /opt/xenapi-in-the-cloud/convert_node_to_xenserver.sh $XENSERVER_PASSWORD $APPLIANCE_URL $APPLIANCE_NAME
 EOF
 
 TSTAMP=$(date +%s)

@@ -8,6 +8,7 @@ KEY_PATH="$2"
 IMAGE="node"
 INSTANCE_NAME="$3"
 FLAVOR="$4"
+APPLIANCE_NAME="Devstack"
 
 . $THISDIR/functions
 
@@ -40,7 +41,7 @@ FEED_WITH_NOTHING="< /dev/null"
     cat << EOF
 set -eux
 # Get some parameters
-APP=\$($SSH_DOM0 xe vm-list name-label=Appliance --minimal $FEED_WITH_NOTHING)
+APP=\$($SSH_DOM0 xe vm-list name-label=$APPLIANCE_NAME --minimal $FEED_WITH_NOTHING)
 
 # Create a vm network
 VMNET=\$($SSH_DOM0 xe network-create name-label=vmnet $FEED_WITH_NOTHING)

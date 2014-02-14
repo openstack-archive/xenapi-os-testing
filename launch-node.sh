@@ -5,10 +5,10 @@ set -eux
 THISDIR=$(dirname $(readlink -f $0))
 KEY_NAME="$1"
 KEY_PATH="$2"
-IMAGE="node"
 INSTANCE_NAME="$3"
 FLAVOR="$4"
-APPLIANCE_NAME="Devstack"
+IMAGE="${5:-node}"
+APPLIANCE_NAME="devstack"
 RUN_TESTS_SCRIPT="$THISDIR/run_tests.sh"
 
 . $THISDIR/functions

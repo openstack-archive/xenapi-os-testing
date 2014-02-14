@@ -20,20 +20,19 @@ export DEVSTACK_GATE_TIMEOUT=240
 set -u
 
 SSH_DOM0="sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2"
-FEED_WITH_NOTHING="< /dev/null"
 
 # Get some parameters
-APP=$($SSH_DOM0 xe vm-list name-label=$APPLIANCE_NAME --minimal $FEED_WITH_NOTHING)
+APP=$($SSH_DOM0 xe vm-list name-label=$APPLIANCE_NAME --minimal </dev/null)
 
 # Create a vm network
-VMNET=$($SSH_DOM0 xe network-create name-label=vmnet $FEED_WITH_NOTHING)
-VMVIF=$($SSH_DOM0 xe vif-create vm-uuid=$APP network-uuid=$VMNET device=3 $FEED_WITH_NOTHING)
-$SSH_DOM0 xe vif-plug uuid=$VMVIF $FEED_WITH_NOTHING
+VMNET=$($SSH_DOM0 xe network-create name-label=vmnet </dev/null)
+VMVIF=$($SSH_DOM0 xe vif-create vm-uuid=$APP network-uuid=$VMNET device=3 </dev/null)
+$SSH_DOM0 xe vif-plug uuid=$VMVIF </dev/null
 
 # Create pub network
-PUBNET=$($SSH_DOM0 xe network-create name-label=pubnet $FEED_WITH_NOTHING)
-PUBVIF=$($SSH_DOM0 xe vif-create vm-uuid=$APP network-uuid=$PUBNET device=4 $FEED_WITH_NOTHING)
-$SSH_DOM0 xe vif-plug uuid=$PUBVIF $FEED_WITH_NOTHING
+PUBNET=$($SSH_DOM0 xe network-create name-label=pubnet </dev/null)
+PUBVIF=$($SSH_DOM0 xe vif-create vm-uuid=$APP network-uuid=$PUBNET device=4 </dev/null)
+$SSH_DOM0 xe vif-plug uuid=$PUBVIF </dev/null
 
 # Hack iSCSI SR
 $SSH_DOM0 << SRHACK
@@ -47,10 +46,10 @@ for dev in eth0 eth1 eth2 eth3 eth4; do
 done
 
 # Add a separate disk
-SR=$($SSH_DOM0 xe sr-list type=ext  --minimal $FEED_WITH_NOTHING)
-VDI=$($SSH_DOM0 xe vdi-create name-label=disk-for-volumes virtual-size=10GiB sr-uuid=$SR type=user $FEED_WITH_NOTHING)
-VBD=$($SSH_DOM0 xe vbd-create vm-uuid=$APP vdi-uuid=$VDI device=1 $FEED_WITH_NOTHING)
-$SSH_DOM0 xe vbd-plug uuid=$VBD $FEED_WITH_NOTHING
+SR=$($SSH_DOM0 xe sr-list type=ext  --minimal </dev/null)
+VDI=$($SSH_DOM0 xe vdi-create name-label=disk-for-volumes virtual-size=10GiB sr-uuid=$SR type=user </dev/null)
+VBD=$($SSH_DOM0 xe vbd-create vm-uuid=$APP vdi-uuid=$VDI device=1 </dev/null)
+$SSH_DOM0 xe vbd-plug uuid=$VBD </dev/null
 
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1

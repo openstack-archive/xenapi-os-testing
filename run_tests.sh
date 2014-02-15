@@ -114,9 +114,9 @@ cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 function trapexit {
     exit_code=$?
     if [ $exit_code -eq 0 ]; then
-	echo "Final result: Tests passed" | tee ~/result.txt
+	echo "Passed" | tee ~/result.txt
     else
-	echo "Final result: Tests failed" | tee ~/result.txt
+	echo "Failed" | tee ~/result.txt
     fi
 
     # Do not use 'exit' - bash will preserve the status

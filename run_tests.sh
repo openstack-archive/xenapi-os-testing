@@ -95,7 +95,7 @@ TEMPFILE=`mktemp`
 echo "stack ALL= NOPASSWD:ALL" >$TEMPFILE
 chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
-udo mv $TEMPFILE /etc/sudoers.d/40_stack_sh
+sudo mv $TEMPFILE /etc/sudoers.d/40_stack_sh
 
 function pre_test_hook() {
 # Plugins

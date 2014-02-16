@@ -2,6 +2,21 @@
 
 exec > run_tests.log 2>&1
 
+# Trap the exit code + log a final message
+function trapexit {
+    exit_code=$?
+    if [ $exit_code -eq 0 ]; then
+	echo "Passed" | tee ~/result.txt
+    else
+	echo "Failed" | tee ~/result.txt
+    fi
+
+    # Do not use 'exit' - bash will preserve the status
+}
+
+trap trapexit EXIT
+
+
 set -ex
 
 #REPLACE_ENV
@@ -109,20 +124,6 @@ git clone https://github.com/matelakat/devstack-gate -b xenserver-integration
 #( sudo mkdir -p /opt/stack/new && sudo chown -R jenkins:jenkins /opt/stack/new && cd /opt/stack/new && git clone https://github.com/matelakat/devstack-gate -b xenserver-integration )
 
 cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
-
-# Trap the exit code + log a final message
-function trapexit {
-    exit_code=$?
-    if [ $exit_code -eq 0 ]; then
-	echo "Passed" | tee ~/result.txt
-    else
-	echo "Failed" | tee ~/result.txt
-    fi
-
-    # Do not use 'exit' - bash will preserve the status
-}
-
-trap trapexit EXIT
 
 # OpenStack doesn't care much about unset variables...
 set +ue

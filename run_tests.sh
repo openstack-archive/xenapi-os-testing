@@ -1,6 +1,7 @@
 #!/bin/bash
 
-exec > run_tests.log 2>&1
+[ -e ~/workspace/testing/logs ] || mkdir -p ~/workspace/testing/logs
+exec > ~/workspace/testing/logs/run_tests.log 2>&1
 
 # Trap the exit code + log a final message
 function trapexit {

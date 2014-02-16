@@ -92,7 +92,7 @@ mkdir -p $WORKSPACE
 # Need to let stack sudo as domzero too
 # TODO: Merge this somewhere better?
 TEMPFILE=`mktemp`
-echo "stack ALL= NOPASSWD:ALL" >$TEMPFILE
+echo "stack ALL=(ALL) NOPASSWD:ALL" >$TEMPFILE
 chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/40_stack_sh

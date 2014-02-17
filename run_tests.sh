@@ -99,12 +99,12 @@ sudo mv $TEMPFILE /etc/sudoers.d/40_stack_sh
 
 function pre_test_hook() {
 # Plugins
-tar -czf - -C /home/jenkins/workspace-cache/nova/plugins/xenserver/xenapi/etc/xapi.d/plugins/ ./ |
+tar -czf - -C /opt/stack/new/nova/plugins/xenserver/xenapi/etc/xapi.d/plugins/ ./ |
     run_in_domzero \
     'tar -xzf - -C /etc/xapi.d/plugins/ && chmod a+x /etc/xapi.d/plugins/*'
 
 # Console log
-tar -czf - -C /home/jenkins/workspace-cache/nova/tools/xenserver/ rotate_xen_guest_logs.sh |
+tar -czf - -C /opt/stack/new/nova/tools/xenserver/ rotate_xen_guest_logs.sh |
     run_in_domzero \
     'tar -xzf - -C /root/ && chmod +x /root/rotate_xen_guest_logs.sh && mkdir -p /var/log/xen/guest'
 run_in_domzero crontab - << CRONTAB
@@ -112,7 +112,7 @@ run_in_domzero crontab - << CRONTAB
 CRONTAB
 
 (
-    cd /home/jenkins/workspace-cache/devstack
+    cd /opt/stack/new/devstack
     {
         echo "set -eux"
         cat tools/xen/functions

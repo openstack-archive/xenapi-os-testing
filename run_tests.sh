@@ -1,8 +1,5 @@
 #!/bin/bash
 
-[ -e ~/workspace/testing/logs ] || mkdir -p ~/workspace/testing/logs
-exec > ~/workspace/testing/logs/run_tests.log 2>&1
-
 # Trap the exit code + log a final message
 function trapexit {
     exit_code=$?
@@ -12,6 +9,8 @@ function trapexit {
 	echo "Failed" | tee ~/result.txt
     fi
 
+    [ -e ~/workspace/testing/logs ] || mkdir -p ~/workspace/testing/logs
+    mv ~/run_tests.log ~/workspace/testing/logs
     # Do not use 'exit' - bash will preserve the status
 }
 

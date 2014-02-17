@@ -129,7 +129,9 @@ sudo iptables -I INPUT 1 -i eth2 -s 192.168.33.0/24 -j ACCEPT
 cd $WORKSPACE
 git clone https://github.com/matelakat/devstack-gate -b xenserver-integration
 
-#( sudo mkdir -p /opt/stack/new && sudo chown -R jenkins:jenkins /opt/stack/new && cd /opt/stack/new && git clone https://github.com/matelakat/devstack-gate -b xenserver-integration )
+# devstack-gate referneces $BASE/new for where it expects devstack-gate... Create copy there too
+# When we can disable SKIP_DEVSTACK_GATE_PROJECT (i.e. everything upstreamed) then this can be removed.
+( sudo mkdir -p /opt/stack/new && sudo chown -R jenkins:jenkins /opt/stack/new && cd /opt/stack/new && git clone https://github.com/matelakat/devstack-gate -b xenserver-integration )
 
 cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 

@@ -19,17 +19,6 @@ function trapexit {
 
 trap trapexit EXIT
 
-# Timestamp stdout + stderr
-exec 1> >( awk '
-    {
-        cmd ="date +\"%Y-%m-%d %H:%M:%S \""
-        cmd | getline now
-        close("date +\"%Y-%m-%d %H:%M:%S \"")
-        sub(/^/, now)
-        print
-        fflush()
-    }' ) 2>&1
-
 set -ex
 
 #REPLACE_ENV

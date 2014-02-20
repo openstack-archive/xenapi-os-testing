@@ -1,5 +1,8 @@
 #!/bin/bash
 
+DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
+DEVSTACK_GATE_BRANCH="master"
+
 # Trap the exit code + log a final message
 function trapexit {
     exit_code=$?
@@ -83,9 +86,9 @@ export WORKSPACE=/home/jenkins/workspace/testing
 # Check out a custom branch
 (
     cd workspace-cache/devstack-gate/
-    git remote add mate https://github.com/matelakat/devstack-gate
-    git fetch mate
-    git checkout xenserver-integration
+    git remote add DEVSTACK_GATE_REPO "$DEVSTACK_GATE_REPO"
+    git fetch DEVSTACK_GATE_REPO
+    git checkout "DEVSTACK_GATE_REPO/$DEVSTACK_GATE_BRANCH" -B DEVSTACK_GATE_BRANCH
 )
 mkdir -p $WORKSPACE
 
@@ -127,11 +130,11 @@ CRONTAB
 sudo iptables -I INPUT 1 -i eth2 -s 192.168.33.0/24 -j ACCEPT
 
 cd $WORKSPACE
-git clone https://github.com/matelakat/devstack-gate -b xenserver-integration
+git clone https://github.com/citrix-openstack/devstack-gate -b master
 
 # devstack-gate referneces $BASE/new for where it expects devstack-gate... Create copy there too
 # When we can disable SKIP_DEVSTACK_GATE_PROJECT (i.e. everything upstreamed) then this can be removed.
-( sudo mkdir -p /opt/stack/new && sudo chown -R jenkins:jenkins /opt/stack/new && cd /opt/stack/new && git clone https://github.com/matelakat/devstack-gate -b xenserver-integration )
+( sudo mkdir -p /opt/stack/new && sudo chown -R jenkins:jenkins /opt/stack/new && cd /opt/stack/new && git clone "$DEVSTACK_GATE_REPO" -b "$DEVSTACK_GATE_BRANCH" )
 
 cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 

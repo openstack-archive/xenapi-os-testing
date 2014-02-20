@@ -66,7 +66,7 @@ done
 
 # Add a separate disk
 SR=$(run_in_domzero xe sr-list type=ext  --minimal </dev/null)
-VDI=$(run_in_domzero xe vdi-create name-label=disk-for-volumes virtual-size=10GiB sr-uuid=$SR type=user </dev/null)
+VDI=$(run_in_domzero xe vdi-create name-label=disk-for-volumes virtual-size=20GiB sr-uuid=$SR type=user </dev/null)
 VBD=$(run_in_domzero xe vbd-create vm-uuid=$APP vdi-uuid=$VDI device=1 </dev/null)
 run_in_domzero xe vbd-plug uuid=$VBD </dev/null
 

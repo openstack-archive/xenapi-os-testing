@@ -123,6 +123,15 @@ CRONTAB
         echo "create_directory_for_kernels"
     } | run_in_domzero
 )
+
+## Cherry-pick some changes to tempest
+
+(
+    cd /opt/stack/new/tempest
+    sudo git fetch https://review.openstack.org/openstack/tempest refs/changes/20/75120/5
+    sudo git cherry-pick FETCH_HEAD
+)
+
 }
 
 # Insert a rule as the first position - allow all traffic on the mgmt interface

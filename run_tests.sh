@@ -36,9 +36,6 @@ export DEVSTACK_GATE_VIRT_DRIVER=xenapi
 # Set gate timeout to 2 hours
 export DEVSTACK_GATE_TIMEOUT=240
 
-touch /tmp/tempest_exclusion_list
-export TEMPEST_EXCLUSION_LIST=${TEMPEST_EXCLUSION_LIST:-/tmp/tempest_exclusion_list}
-export TEMPEST_EXCLUSION_LOG=${TEMPEST_EXCLUSION_LOG:-/tmp/tempest_exclusion_log}
 
 set -u
 
@@ -133,6 +130,7 @@ CRONTAB
     cd /opt/stack/new/tempest
     sudo git fetch https://review.openstack.org/openstack/tempest refs/changes/20/75120/6
     sudo git cherry-pick FETCH_HEAD
+    sudo mv /tmp/tempest_exclusion_list /opt/stack/new/tempest/.excluded_tests
 )
 
 }

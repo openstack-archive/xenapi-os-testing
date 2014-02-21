@@ -131,7 +131,7 @@ CRONTAB
     sudo git fetch https://review.openstack.org/openstack/tempest refs/changes/20/75120/6
     sudo git cherry-pick FETCH_HEAD
 
-    sudo cp /home/jenkins/xenapi-os-testing/tempest_excluded_tests /opt/stack/new/tempest/.excluded_tests
+    sudo cp /home/jenkins/xenapi-os-testing/tempest_exclusion_list /opt/stack/new/tempest/.excluded_tests
 )
 
 }

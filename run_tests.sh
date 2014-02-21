@@ -36,6 +36,10 @@ export DEVSTACK_GATE_VIRT_DRIVER=xenapi
 # Set gate timeout to 2 hours
 export DEVSTACK_GATE_TIMEOUT=240
 
+touch /tmp/tempest_exclusion_list
+export TEMPEST_EXCLUSION_LIST=${TEMPEST_EXCLUSION_LIST:-/tmp/tempest_exclusion_list}
+export TEMPEST_EXCLUSION_LOG=${TEMPEST_EXCLUSION_LOG:-/tmp/tempest_exclusion_log}
+
 set -u
 
 function run_in_domzero() {

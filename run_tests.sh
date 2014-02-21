@@ -130,6 +130,9 @@ CRONTAB
     cd /opt/stack/new/tempest
     sudo git fetch https://review.openstack.org/openstack/tempest refs/changes/20/75120/6
     sudo git cherry-pick FETCH_HEAD
+
+    # Make sure, that the file exists
+    touch /tmp/tempest_exclusion_list
     sudo mv /tmp/tempest_exclusion_list /opt/stack/new/tempest/.excluded_tests
 )
 

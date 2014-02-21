@@ -131,7 +131,7 @@ CRONTAB
 
 (
     cd /opt/stack/new/tempest
-    sudo git fetch https://review.openstack.org/openstack/tempest refs/changes/20/75120/5
+    sudo git fetch https://review.openstack.org/openstack/tempest refs/changes/20/75120/6
     sudo git cherry-pick FETCH_HEAD
 )
 

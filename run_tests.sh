@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo $$ >> ~/run_tests.pid
+
 DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
 DEVSTACK_GATE_BRANCH="master"
 

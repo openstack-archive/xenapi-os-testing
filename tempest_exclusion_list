@@ -63,6 +63,7 @@ tempest.api.volume.admin.test_volumes_backup.VolumesBackupsTest.test_volume_back
 tempest.api.volume.admin.test_volume_types.VolumeTypesTest.test_create_get_delete_volume_with_volume_type_and_extra_specs[gate,smoke]
 tempest.api.volume.test_volumes_actions.VolumesActionsTest.test_volume_upload[gate,image]
 tempest.api.volume.test_volumes_actions.VolumesActionsTestXML.test_volume_upload[gate,image]
+tempest.api.volume.admin.test_volumes_backup.VolumesBackupsTest.test_volume_backup_create_get_detailed_list_restore_delete[gate,smoke]
 tempest.api.volume.test_volumes_get.VolumesGetTest.test_volume_create_get_update_delete_as_clone[gate]
 tempest.api.volume.test_volumes_get.VolumesGetTest.test_volume_create_get_update_delete_from_image[gate,image,smoke]
 tempest.api.volume.test_volumes_get.VolumesGetTest.test_volume_create_get_update_delete[gate,smoke]

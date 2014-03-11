@@ -41,6 +41,14 @@ export DEVSTACK_GATE_TIMEOUT=240
 
 set -u
 
+# Need to let jenkins sudo as domzero
+# TODO: Merge this somewhere better?
+TEMPFILE=`mktemp`
+echo "jenkins ALL=(ALL) NOPASSWD:ALL" >$TEMPFILE
+chmod 0440 $TEMPFILE
+sudo chown root:root $TEMPFILE
+sudo mv $TEMPFILE /etc/sudoers.d/40_jenkins
+
 function run_in_domzero() {
     sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 "$@"
 }

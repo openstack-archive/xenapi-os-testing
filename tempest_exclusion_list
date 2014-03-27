@@ -1,4 +1,5 @@
 
+tempest.api.compute.admin.test_hypervisor.HypervisorAdminTestJSON.test_get_hypervisor_show_details[gate]
 tempest.api.compute.images.test_list_image_filters.ListImageFiltersTestJSON.test_list_images_filter_by_changes_since[gate]
 tempest.api.compute.images.test_list_image_filters.ListImageFiltersTestJSON.test_list_images_filter_by_name[gate]
 tempest.api.compute.images.test_list_image_filters.ListImageFiltersTestJSON.test_list_images_filter_by_server_id[gate]
@@ -54,6 +55,7 @@ tempest.api.compute.servers.test_servers_negative.ServersNegativeTestXML.test_up
 tempest.api.compute.servers.test_servers_negative.ServersNegativeTestXML.test_update_server_set_empty_name[gate,negative]
 tempest.api.compute.servers.test_servers.ServersTestJSON.test_update_access_server_address[gate]
 tempest.api.compute.servers.test_servers.ServersTestJSON.test_update_server_name[gate]
+tempest.api.compute.v3.admin.test_hypervisor.HypervisorAdminV3Test.test_get_hypervisor_show_details[gate]
 tempest.api.compute.v3.admin.test_servers.ServersAdminV3Test.test_rebuild_server_in_error_state[gate]
 tempest.api.compute.v3.admin.test_servers.ServersAdminV3Test.test_reset_state_server[gate]
 tempest.api.compute.v3.servers.test_delete_server.DeleteServersV3Test.test_delete_server_while_in_verify_resize_state[gate]

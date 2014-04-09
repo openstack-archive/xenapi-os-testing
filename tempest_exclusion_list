@@ -56,6 +56,7 @@ tempest.api.compute.servers.test_servers_negative.ServersNegativeTestXML.test_up
 tempest.api.compute.servers.test_servers.ServersTestJSON.test_update_access_server_address[gate]
 tempest.api.compute.servers.test_servers.ServersTestJSON.test_update_server_name[gate]
 tempest.api.compute.v3.admin.test_hypervisor.HypervisorAdminV3Test.test_get_hypervisor_show_details[gate]
+tempest.api.compute.v3.admin.test_migrations.MigrationsAdminV3Test.test_list_migrations_in_flavor_resize_situation[gate]
 tempest.api.compute.v3.admin.test_servers.ServersAdminV3Test.test_rebuild_server_in_error_state[gate]
 tempest.api.compute.v3.admin.test_servers.ServersAdminV3Test.test_reset_state_server[gate]
 tempest.api.compute.v3.servers.test_delete_server.DeleteServersV3Test.test_delete_server_while_in_verify_resize_state[gate]

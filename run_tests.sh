@@ -2,7 +2,7 @@
 
 echo $$ >> ~/run_tests.pid
 
-DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
+DEVSTACK_GATE_REPO="https://git.openstack.org/openstack-infra/devstack-gate"
 DEVSTACK_GATE_BRANCH="master"
 
 # Trap the exit code + log a final message
@@ -153,7 +153,7 @@ CRONTAB
 sudo iptables -I INPUT 1 -i eth2 -s 192.168.33.0/24 -j ACCEPT
 
 cd $WORKSPACE
-git clone https://github.com/citrix-openstack/devstack-gate -b master
+git clone $DEVSTACK_GATE_REPO -b $DEVSTACK_GATE_BRANCH
 
 # devstack-gate referneces $BASE/new for where it expects devstack-gate... Create copy there too
 # When we can disable SKIP_DEVSTACK_GATE_PROJECT (i.e. everything upstreamed) then this can be removed.

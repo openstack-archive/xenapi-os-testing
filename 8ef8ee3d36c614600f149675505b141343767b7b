@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+2: Bob Ball <bob.ball@citrix.com>
+Workflow+1: Bob Ball <bob.ball@citrix.com>
+Verified+1: XenServer CI <openstack@citrix.com>
+Submitted-by: Jenkins
+Submitted-at: Thu, 12 Jun 2014 14:56:52 +0000
+Reviewed-on: https://review.openstack.org/97026
+Project: stackforge/xenapi-os-testing
+Branch: refs/heads/master

@@ -2,8 +2,8 @@
 
 echo $$ >> ~/run_tests.pid
 
-DEVSTACK_GATE_REPO="https://git.openstack.org/openstack-infra/devstack-gate"
-DEVSTACK_GATE_BRANCH="master"
+DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
+DEVSTACK_GATE_BRANCH="zuul_merge"
 
 # Trap the exit code + log a final message
 function trapexit {

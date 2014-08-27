@@ -165,4 +165,5 @@ cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 
 # OpenStack doesn't care much about unset variables...
 set +ue
-source ./safe-devstack-vm-gate-wrap.sh
+source devstack-gate/functions.sh
+tsfilter source ./safe-devstack-vm-gate-wrap.sh

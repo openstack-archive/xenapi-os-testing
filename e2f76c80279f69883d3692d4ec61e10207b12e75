@@ -1,0 +1,8 @@
+Verified+2: Jenkins
+Code-Review+2: Mate Lakat <mate.lakat@citrix.com>
+Workflow+1: Mate Lakat <mate.lakat@citrix.com>
+Submitted-by: Jenkins
+Submitted-at: Mon, 29 Sep 2014 09:52:42 +0000
+Reviewed-on: https://review.openstack.org/124693
+Project: stackforge/xenapi-os-testing
+Branch: refs/heads/master

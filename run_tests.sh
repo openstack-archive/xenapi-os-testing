@@ -92,14 +92,16 @@ export SKIP_DEVSTACK_GATE_PROJECT=1
 sudo pip install -i https://pypi.python.org/simple/ XenAPI
 sudo pip install pyyaml
 
+LOCATION_OF_LOCAL_GIT_REPOSITORIES=/opt/git
+
 # These came from the Readme
 export ZUUL_URL=https://review.openstack.org/p
-export REPO_URL=/home/jenkins/workspace-cache
+export REPO_URL=$LOCATION_OF_LOCAL_GIT_REPOSITORIES
 export WORKSPACE=/home/jenkins/workspace/testing
 
 # Check out a custom branch
 (
-    cd workspace-cache/devstack-gate/
+    cd $LOCATION_OF_LOCAL_GIT_REPOSITORIES/openstack-infra/devstack-gate/
     git remote add DEVSTACK_GATE_REPO "$DEVSTACK_GATE_REPO"
     git fetch DEVSTACK_GATE_REPO
     git checkout "DEVSTACK_GATE_REPO/$DEVSTACK_GATE_BRANCH" -B DEVSTACK_GATE_BRANCH

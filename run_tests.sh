@@ -102,9 +102,9 @@ export WORKSPACE=/home/jenkins/workspace/testing
 # Check out a custom branch
 (
     cd $LOCATION_OF_LOCAL_GIT_REPOSITORIES/openstack-infra/devstack-gate/
-    git remote add DEVSTACK_GATE_REPO "$DEVSTACK_GATE_REPO"
-    git fetch DEVSTACK_GATE_REPO
-    git checkout "DEVSTACK_GATE_REPO/$DEVSTACK_GATE_BRANCH" -B DEVSTACK_GATE_BRANCH
+    sudo git remote add DEVSTACK_GATE_REPO "$DEVSTACK_GATE_REPO"
+    sudo git fetch DEVSTACK_GATE_REPO
+    sudo git checkout "DEVSTACK_GATE_REPO/$DEVSTACK_GATE_BRANCH" -B DEVSTACK_GATE_BRANCH
 )
 mkdir -p $WORKSPACE
 

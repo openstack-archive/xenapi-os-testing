@@ -143,17 +143,10 @@ CRONTAB
 ## Cherry-pick some changes to tempest
 (
     cd /opt/stack/new/tempest
-    sudo git fetch https://review.openstack.org/openstack/tempest refs/changes/65/81565/3
+    sudo git fetch https://review.openstack.org/openstack/tempest refs/changes/55/161155/1
     sudo git cherry-pick FETCH_HEAD
 
     sudo cp /home/jenkins/xenapi-os-testing/tempest_exclusion_list /opt/stack/new/tempest/.excluded_tests
-)
-
-## Cherry-pick swift fix
-(
-    cd /opt/stack/new/devstack
-    sudo git fetch https://review.openstack.org/openstack-dev/devstack refs/changes/06/151506/2
-    sudo git cherry-pick FETCH_HEAD
 )
 
 }

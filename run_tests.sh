@@ -167,4 +167,6 @@ cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 
 # OpenStack doesn't care much about unset variables...
 set +ue
+# Install python-requests to work around https://review.openstack.org/#/c/186545/2/tools/fixup_stuff.sh
+sudo apt-get install -y python-requests
 source ./safe-devstack-vm-gate-wrap.sh

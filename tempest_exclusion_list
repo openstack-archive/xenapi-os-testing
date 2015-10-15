@@ -24,3 +24,4 @@ tempest.thirdparty.boto.test_ec2_volumes.EC2VolumesTest.test_create_volume_from_
 tempest.thirdparty.boto.test_s3_ec2_images.S3ImagesTest.test_register_get_deregister_aki_image
 tempest.thirdparty.boto.test_s3_ec2_images.S3ImagesTest.test_register_get_deregister_ami_image
 tempest.thirdparty.boto.test_s3_ec2_images.S3ImagesTest.test_register_get_deregister_ari_image
+tempest.api.image.v2.test_images.ListImagesTest

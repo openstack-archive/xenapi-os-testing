@@ -153,6 +153,9 @@ CRONTAB
 
 }
 
+# export this function to be used by devstack-gate
+export -f pre_test_hook
+
 # Insert a rule as the first position - allow all traffic on the mgmt interface
 # Other rules are inserted by config/modules/iptables/templates/rules.erb
 sudo iptables -I INPUT 1 -i eth2 -s 192.168.33.0/24 -j ACCEPT

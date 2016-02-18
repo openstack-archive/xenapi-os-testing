@@ -166,6 +166,8 @@ git clone $DEVSTACK_GATE_REPO -b $DEVSTACK_GATE_BRANCH
 
 cp devstack-gate/devstack-vm-gate-wrap.sh ./safe-devstack-vm-gate-wrap.sh
 
+NODEPOOL_PYPI_MIRROR=http://pypi.python.org/simple
+
 # OpenStack doesn't care much about unset variables...
 set +ue
 source ./safe-devstack-vm-gate-wrap.sh

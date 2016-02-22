@@ -3,7 +3,7 @@
 echo $$ >> ~/run_tests.pid
 
 DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
-DEVSTACK_GATE_BRANCH="temp_branch"
+DEVSTACK_GATE_BRANCH="master"
 
 # Trap the exit code + log a final message
 function trapexit {
@@ -152,6 +152,9 @@ CRONTAB
 )
 
 }
+
+# export this function to be used by devstack-gate
+export -f pre_test_hook
 
 # Insert a rule as the first position - allow all traffic on the mgmt interface
 # Other rules are inserted by config/modules/iptables/templates/rules.erb

@@ -63,11 +63,23 @@ APP=$(run_in_domzero xe vm-list name-label=$APPLIANCE_NAME --minimal </dev/null)
 VMNET=$(run_in_domzero xe network-create name-label=vmnet </dev/null)
 VMVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$VMNET device=3 </dev/null)
 run_in_domzero xe vif-plug uuid=$VMVIF </dev/null
+VMBRIDGE=$(run_in_domzero xe network-param-get param-name=bridge uuid=$VMNET </dev/null)
 
 # Create pub network
 PUBNET=$(run_in_domzero xe network-create name-label=pubnet </dev/null)
 PUBVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$PUBNET device=4 </dev/null)
 run_in_domzero xe vif-plug uuid=$PUBVIF </dev/null
+
+# Create integration network for compute node
+INTNET=$(run_in_domzero xe network-create name-label=intnet </dev/null)
+INTBRIDGE=$(run_in_domzero xe network-param-get param-name=bridge uuid=$INTNET </dev/null)
+
+# Set PV-args to domU, these args are used for deploying OpenStack using devstack
+pv_args=$(run_in_domzero xe vm-param-get param-name=PV-args uuid=$APP </dev/null)
+run_in_domzero xe vm-param-set PV-args="$pv_args xen_integration_bridge=$INTBRIDGE flat_network_bridge=$VMBRIDGE" uuid=$APP </dev/null
+
+# Remove restriction of linux bridge usage in Dom0, linux bridge is used for security group
+run_in_domzero rm -f /etc/modprobe.d/blacklist-bridge
 
 # Hack iSCSI SR
 run_in_domzero << SRHACK

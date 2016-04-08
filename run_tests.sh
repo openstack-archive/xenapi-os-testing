@@ -34,12 +34,12 @@ export ZUUL_REF=${ZUUL_REF:-HEAD}
 # Values from the job template
 export DEVSTACK_GATE_TEMPEST=${DEVSTACK_GATE_TEMPEST:-1}
 export DEVSTACK_GATE_TEMPEST_FULL=${DEVSTACK_GATE_TEMPEST_FULL:-0}
-
+export DEVSTACK_GATE_NEUTRON=${DEVSTACK_GATE_NEUTRON:-0}
 
 export PYTHONUNBUFFERED=true
 export DEVSTACK_GATE_VIRT_DRIVER=xenapi
 # Set gate timeout to 2 hours
-export DEVSTACK_GATE_TIMEOUT=240
+export DEVSTACK_GATE_TIMEOUT=${DEVSTACK_GATE_TIMEOUT:-240}
 export DEVSTACK_GATE_XENAPI_DOM0_IP=192.168.33.2
 export DEVSTACK_GATE_XENAPI_DOMU_IP=192.168.33.1
 export DEVSTACK_GATE_XENAPI_PASSWORD=password
@@ -71,11 +71,24 @@ APP=$(run_in_domzero xe vm-list name-label=$APPLIANCE_NAME --minimal </dev/null)
 VMNET=$(run_in_domzero xe network-create name-label=vmnet </dev/null)
 VMVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$VMNET device=3 </dev/null)
 run_in_domzero xe vif-plug uuid=$VMVIF </dev/null
+export VMBRIDGE=$(run_in_domzero xe network-param-get param-name=bridge uuid=$VMNET </dev/null)
 
 # Create pub network
 PUBNET=$(run_in_domzero xe network-create name-label=pubnet </dev/null)
 PUBVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$PUBNET device=4 </dev/null)
 run_in_domzero xe vif-plug uuid=$PUBVIF </dev/null
+
+if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
+    # Set to keep localrc file as we will config localrc during pre_test_hook
+    export KEEP_LOCALRC=1
+
+    # Create integration network for compute node
+    INTNET=$(run_in_domzero xe network-create name-label=intnet </dev/null)
+    export INTBRIDGE=$(run_in_domzero xe network-param-get param-name=bridge uuid=$INTNET </dev/null)
+
+    # Remove restriction of linux bridge usage in Dom0, linux bridge is used for security group
+    run_in_domzero rm -f /etc/modprobe.d/blacklist-bridge*
+fi
 
 # Hack iSCSI SR
 run_in_domzero << SRHACK
@@ -146,6 +159,39 @@ CRONTAB
         echo "create_directory_for_images"
         echo "create_directory_for_kernels"
     } | run_in_domzero
+)
+
+## config interface and localrc for neutron network
+(
+    if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
+        # Set IP address for eth3(vmnet) and eth4(pubnet)
+        sudo ip addr add 10.1.0.254/24 broadcast 10.1.0.255 dev eth3
+        sudo ip link set eth3 up
+        sudo ip addr add 172.24.5.1/24 broadcast 172.24.5.255 dev eth4
+        sudo ip link set eth4 up
+
+        # Set localrc for neutron network
+        localrc="/opt/stack/new/devstack/localrc"
+        cat <<EOF >>"$localrc"
+ENABLED_SERVICES+=",neutron,q-agt,q-domua,q-meta,q-svc,q-dhcp,q-l3,q-metering,-n-net"
+Q_PLUGIN=ml2
+Q_USE_SECGROUP=False
+ENABLE_TENANT_VLANS="True"
+ENABLE_TENANT_TUNNELS="False"
+Q_ML2_TENANT_NETWORK_TYPE="vlan"
+ML2_VLAN_RANGES="physnet1:1000:1024"
+MULTI_HOST=0
+XEN_INTEGRATION_BRIDGE=$INTBRIDGE
+FLAT_NETWORK_BRIDGE=$VMBRIDGE
+Q_AGENT=openvswitch
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
+Q_ML2_PLUGIN_TYPE_DRIVERS=vlan
+OVS_PHYSICAL_BRIDGE=br-ex
+PUBLIC_BRIDGE=br-ex
+# Set instance build timeout to 300s in tempest.conf
+BUILD_TIMEOUT=300
+EOF
+    fi
 )
 
 }

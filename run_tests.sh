@@ -69,6 +69,12 @@ PUBNET=$(run_in_domzero xe network-create name-label=pubnet </dev/null)
 PUBVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$PUBNET device=4 </dev/null)
 run_in_domzero xe vif-plug uuid=$PUBVIF </dev/null
 
+# Create integration network for compute node
+run_in_domzero xe network-create name-label=intnet </dev/null
+
+# Remove restriction of linux bridge usage in Dom0
+run_in_domzero rm -f /etc/modprobe.d/blacklist-bridge
+
 # Hack iSCSI SR
 run_in_domzero << SRHACK
 set -eux

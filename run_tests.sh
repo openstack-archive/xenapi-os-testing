@@ -31,7 +31,7 @@ export ZUUL_REF=${ZUUL_REF:-HEAD}
 # Values from the job template
 export DEVSTACK_GATE_TEMPEST=${DEVSTACK_GATE_TEMPEST:-1}
 export DEVSTACK_GATE_TEMPEST_FULL=${DEVSTACK_GATE_TEMPEST_FULL:-0}
-
+export DEVSTACK_GATE_NEUTRON=${DEVSTACK_GATE_NEUTRON:-0}
 
 export PYTHONUNBUFFERED=true
 export DEVSTACK_GATE_VIRT_DRIVER=xenapi
@@ -63,11 +63,32 @@ APP=$(run_in_domzero xe vm-list name-label=$APPLIANCE_NAME --minimal </dev/null)
 VMNET=$(run_in_domzero xe network-create name-label=vmnet </dev/null)
 VMVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$VMNET device=3 </dev/null)
 run_in_domzero xe vif-plug uuid=$VMVIF </dev/null
+VMBRIDGE=$(run_in_domzero xe network-param-get param-name=bridge uuid=$VMNET </dev/null)
 
 # Create pub network
 PUBNET=$(run_in_domzero xe network-create name-label=pubnet </dev/null)
 PUBVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$PUBNET device=4 </dev/null)
 run_in_domzero xe vif-plug uuid=$PUBVIF </dev/null
+
+if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
+    # Create integration network for compute node
+    INTNET=$(run_in_domzero xe network-create name-label=intnet </dev/null)
+    INTBRIDGE=$(run_in_domzero xe network-param-get param-name=bridge uuid=$INTNET </dev/null)
+
+    # Set PV-args to domU, these args are used for deploying OpenStack using devstack
+    pv_args=$(run_in_domzero xe vm-param-get param-name=PV-args uuid=$APP </dev/null)
+    pv_args+=" xen_integration_bridge=$INTBRIDGE flat_network_bridge=$VMBRIDGE"
+    run_in_domzero "xe vm-param-set PV-args='$pv_args' uuid=$APP"
+    # Set cmdline for DomU, devstack use proc/cmdline file to get integration bridge and vm bridge
+    new_proc_cmdline=/home/jenkins/cmdline
+    cat <<EOF >>"$new_proc_cmdline"
+$pv_args
+EOF
+    sudo mount -n --bind -o -ro $new_proc_cmdline /proc/cmdline
+
+    # Remove restriction of linux bridge usage in Dom0, linux bridge is used for security group
+    run_in_domzero rm -f /etc/modprobe.d/blacklist-bridge
+fi
 
 # Hack iSCSI SR
 run_in_domzero << SRHACK
@@ -150,6 +171,37 @@ CRONTAB
 
     sudo cp /home/jenkins/xenapi-os-testing/tempest_exclusion_list /opt/stack/new/tempest/.excluded_tests
 )
+
+
+## config interface and localrc for neutron network
+(
+    if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
+        # Set IP address for eth3(vmnet) and eth4(pubnet)
+        sudo ip addr add 10.1.0.254/24 broadcast 10.1.0.255 dev eth3
+        sudo ip link set eth3 up
+        sudo ip addr add 172.24.5.1/24 broadcast 172.24.5.255 dev eth4
+        sudo ip link set eth4 up
+
+        # Set localrc for neutron network
+        localrc="/opt/stack/new/devstack/localrc"
+        cat <<EOF >>"$localrc"
+ENABLED_SERVICES+=",neutron,q-agt,q-domua,q-meta,q-svc,q-dhcp,q-l3,q-metering,-n-net"
+Q_PLUGIN=ml2
+Q_USE_SECGROUP=False
+ENABLE_TENANT_VLANS="True"
+ENABLE_TENANT_TUNNELS="False"
+Q_ML2_TENANT_NETWORK_TYPE="vlan"
+ML2_VLAN_RANGES="physnet1:1000:1024"
+MULTI_HOST=0
+Q_AGENT=openvswitch
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
+Q_ML2_PLUGIN_TYPE_DRIVERS=vlan
+OVS_PHYSICAL_BRIDGE=br-ex
+PUBLIC_BRIDGE=br-ex
+EOF
+    fi
+)
+
 
 }
 

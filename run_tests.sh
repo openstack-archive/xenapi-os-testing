@@ -42,6 +42,20 @@ export DEVSTACK_GATE_XENAPI_DOMU_IP=192.168.33.1
 export DEVSTACK_GATE_XENAPI_PASSWORD=password
 export DEVSTACK_GATE_CLEAN_LOGS=0
 
+# set regular expression
+export DEVSTACK_GATE_TEMPEST_REGEX='(?!.*\[.*\bslow\b.*\]'\
+'|.*test_volume_upload'\
+'|.*test_encrypted_cinder_volumes_cryptsetup'\
+'|.*test_encrypted_cinder_volumes_luks'\
+'|.*test_minimum_basic_scenario'\
+'|.*test_shelve_instance'\
+'|.*test_snapshot_pattern'\
+'|.*test_create_ebs_image_and_check_boot'\
+'|.*test_volume_boot_pattern'\
+'|.*test_shelve_volume_backed_instance)'\
+'|.* boto.*'\
+'(^tempest\.(api|scenario|thirdparty))'
+
 set -u
 
 # Need to let jenkins sudo as domzero
@@ -139,16 +153,6 @@ CRONTAB
         echo "create_directory_for_images"
         echo "create_directory_for_kernels"
     } | run_in_domzero
-)
-
-## Cherry-pick some changes to tempest
-
-(
-    cd /opt/stack/new/tempest
-    sudo git fetch https://review.openstack.org/openstack/tempest refs/changes/88/187688/1
-    sudo git cherry-pick FETCH_HEAD
-
-    sudo cp /home/jenkins/xenapi-os-testing/tempest_exclusion_list /opt/stack/new/tempest/.excluded_tests
 )
 
 }

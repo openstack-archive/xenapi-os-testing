@@ -5,6 +5,8 @@ echo $$ >> ~/run_tests.pid
 DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
 DEVSTACK_GATE_BRANCH="master"
 
+export WORKSPACE=${WORKSPACE:-/home/jenkins/workspace/testing}
+
 # Trap the exit code + log a final message
 function trapexit {
     exit_code=$?
@@ -14,8 +16,9 @@ function trapexit {
 	echo "Failed" | tee ~/result.txt
     fi
 
-    [ -e ~/workspace/testing/logs ] || mkdir -p ~/workspace/testing/logs
-    mv ~/run_tests.log ~/workspace/testing/logs
+    LOGS_DIR=$WORKSPACE/logs
+    [ -e ${LOGS_DIR} ] || mkdir -p ${LOGS_DIR}
+    mv ~/run_tests.log ${LOGS_DIR}
     # Do not use 'exit' - bash will preserve the status
 }
 
@@ -98,7 +101,6 @@ LOCATION_OF_LOCAL_GIT_REPOSITORIES=/opt/git
 # These came from the Readme
 export ZUUL_URL=https://review.openstack.org/p
 export REPO_URL=$LOCATION_OF_LOCAL_GIT_REPOSITORIES
-export WORKSPACE=/home/jenkins/workspace/testing
 
 # Check out a custom branch
 (

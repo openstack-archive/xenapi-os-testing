@@ -98,7 +98,7 @@ LOCATION_OF_LOCAL_GIT_REPOSITORIES=/opt/git
 # These came from the Readme
 export ZUUL_URL=https://review.openstack.org/p
 export REPO_URL=$LOCATION_OF_LOCAL_GIT_REPOSITORIES
-export WORKSPACE=/home/jenkins/workspace/testing
+export WORKSPACE=${WORKSPACE:-/home/jenkins/workspace/testing}
 
 # Check out a custom branch
 (

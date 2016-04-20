@@ -157,6 +157,8 @@ CRONTAB
 
 # export this function to be used by devstack-gate
 export -f pre_test_hook
+# export the functions invoked by pre_test_hook
+export -f run_in_domzero
 
 # Insert a rule as the first position - allow all traffic on the mgmt interface
 # Other rules are inserted by config/modules/iptables/templates/rules.erb

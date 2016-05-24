@@ -48,6 +48,24 @@ export DEVSTACK_GATE_XENAPI_DOMU_IP=192.168.33.1
 export DEVSTACK_GATE_XENAPI_PASSWORD=password
 export DEVSTACK_GATE_CLEAN_LOGS=0
 
+PROJECTS_OVERRIDE="openstack-infra/devstack-gate $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack-dev/devstack $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack-dev/pbr $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/ceilometer $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/cinder $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/glance $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/heat $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/horizon $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/keystone $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/neutron $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/nova $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/requirements $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/swift $PROJECTS_OVERRIDE"
+PROJECTS_OVERRIDE="openstack/tempest $PROJECTS_OVERRIDE"
+export DEVSTACK_GATE_PROJECTS_OVERRIDE=$PROJECTS_OVERRIDE
+
+export OVERRIDE_ENABLED_SERVICES=${OVERRIDE_ENABLED_SERVICES:-c-api,c-bak,c-sch,c-vol,cinder,g-api,g-reg,key,horizon,mysql,rabbit,sysstat,dstat,pidstat,s-proxy,s-account,s-container,s-object,n-api,n-crt,n-obj,n-cpu,n-sch,n-cond,tempest}
+
 # set regular expression
 source /home/jenkins/xenapi-os-testing/tempest_exclusion_list
 if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then

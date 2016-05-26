@@ -200,6 +200,11 @@ EOF
     fi
 )
 
+# TODO(huanxie): temporary change ryu to 4.0
+(
+    sed -i s/ryu===4.2.1/ryu===4.0/g /opt/stack/new/requirements/upper-constraints.txt
+)
+
 }
 
 # export this function to be used by devstack-gate

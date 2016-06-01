@@ -5,9 +5,6 @@ COMMON_TEMPEST_REGEX='(?!.*\[.*\bslow\b.*\]'\
 '|.*tempest.api.volume.test_volumes_actions.VolumesV1ActionsTestXML.test_volume_upload.*'\
 '|.*tempest.api.volume.test_volumes_actions.VolumesV2ActionsTest.test_volume_upload.*'\
 '|.*tempest.api.volume.test_volumes_actions.VolumesV2ActionsTestXML.test_volume_upload.*'\
-'|.*tempest.scenario.test_encrypted_cinder_volumes.TestEncryptedCinderVolumes.test_encrypted_cinder_volumes_cryptsetup.*'\
-'|.*tempest.scenario.test_encrypted_cinder_volumes.TestEncryptedCinderVolumes.test_encrypted_cinder_volumes_luks.*'\
-'|.*tempest.scenario.test_minimum_basic.TestMinimumBasicScenario.test_minimum_basic_scenario.*'\
 '|.*tempest.scenario.test_shelve_instance.TestShelveInstance.test_shelve_instance.*'\
 '|.*tempest.scenario.test_shelve_instance.TestShelveInstance.test_shelve_volume_backed_instance.*'\
 '|.*tempest.scenario.test_snapshot_pattern.TestSnapshotPattern.test_snapshot_pattern.*'\

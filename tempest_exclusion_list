@@ -33,6 +33,11 @@ NEUTRON_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX\
 '|.*tempest.api.compute.servers.test_attach_interfaces.AttachInterfacesTestJSON.test_create_list_show_delete_interfaces.*'\
 '|.*tempest.api.compute.servers.test_server_personality.ServerPersonalityTestJSON.test_rebuild_server_with_personality.*'\
 '|.*tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_rebuild_server_in_stop_state.*'\
+'|.*tempest.api.compute.admin.test_servers.ServersAdminTestJSON.test_rebuild_server_in_error_state.*'\
+'|.*tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_rebuild_server.*'\
+'|.*tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_rebuild_server_with_volume_attached.*'\
+'|.*tempest.api.compute.servers.test_disk_config.ServerDiskConfigTestJSON.test_rebuild_server_with_auto_disk_config.*'\
+'|.*tempest.api.compute.servers.test_disk_config.ServerDiskConfigTestJSON.test_rebuild_server_with_manual_disk_config.*'\
 '|.*tempest.scenario.test_network_advanced_server_ops.TestNetworkAdvancedServerOps.test_server_connectivity_pause_unpause.*'\
 '|.*tempest.scenario.test_network_advanced_server_ops.TestNetworkAdvancedServerOps.test_server_connectivity_reboot.*'\
 '|.*tempest.scenario.test_network_advanced_server_ops.TestNetworkAdvancedServerOps.test_server_connectivity_rebuild.*'\

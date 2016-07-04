@@ -197,6 +197,17 @@ PUBLIC_BRIDGE=br-ex
 # Set instance build timeout to 300s in tempest.conf
 BUILD_TIMEOUT=390
 EOF
+
+        # Set local.conf for neutron network
+        localconf="/opt/stack/new/devstack/local.conf"
+        cat <<EOF >>"$localconf"
+[[local|localrc]]
+
+[[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
+[ovs]
+ovsdb_interface = vsctl
+EOF
+
     fi
 )
 

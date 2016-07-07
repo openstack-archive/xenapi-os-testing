@@ -206,6 +206,7 @@ EOF
 [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
 [ovs]
 ovsdb_interface = vsctl
+of_interface = ovs-ofctl
 EOF
 
     fi

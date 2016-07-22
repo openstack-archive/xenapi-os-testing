@@ -1,0 +1,8 @@
+Code-Review+2: John Hua <john.hua@citrix.com>
+Workflow+1: John Hua <john.hua@citrix.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 22 Jul 2016 03:53:29 +0000
+Reviewed-on: https://review.openstack.org/345742
+Project: openstack/xenapi-os-testing
+Branch: refs/heads/master

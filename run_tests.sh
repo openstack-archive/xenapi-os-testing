@@ -181,6 +181,7 @@ CRONTAB
         cat <<EOF >>"$localrc"
 ENABLED_SERVICES+=",neutron,q-agt,q-domua,q-meta,q-svc,q-dhcp,q-l3,q-metering,-n-net"
 Q_PLUGIN=ml2
+Q_USE_PROVIDERNET_FOR_PUBLIC=False
 Q_USE_SECGROUP=False
 ENABLE_TENANT_VLANS="True"
 ENABLE_TENANT_TUNNELS="False"

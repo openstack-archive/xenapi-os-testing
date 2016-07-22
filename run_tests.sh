@@ -181,7 +181,6 @@ CRONTAB
         cat <<EOF >>"$localrc"
 ENABLED_SERVICES+=",neutron,q-agt,q-domua,q-meta,q-svc,q-dhcp,q-l3,q-metering,-n-net"
 Q_PLUGIN=ml2
-Q_USE_PROVIDERNET_FOR_PUBLIC=False
 Q_USE_SECGROUP=False
 ENABLE_TENANT_VLANS="True"
 ENABLE_TENANT_TUNNELS="False"
@@ -192,7 +191,7 @@ XEN_INTEGRATION_BRIDGE=$INTBRIDGE
 FLAT_NETWORK_BRIDGE=$VMBRIDGE
 Q_AGENT=openvswitch
 Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
-Q_ML2_PLUGIN_TYPE_DRIVERS=vlan
+Q_ML2_PLUGIN_TYPE_DRIVERS="vlan,flat"
 OVS_PHYSICAL_BRIDGE=br-ex
 PUBLIC_BRIDGE=br-ex
 # Set instance build timeout to 300s in tempest.conf

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# to verify without tempfs
+sudo vgremove -f stack-volumes-lvmdriver-1
+
 echo $$ >> ~/run_tests.pid
 
 DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"

@@ -61,3 +61,7 @@ NEUTRON_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX\
 '|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_update_router_admin_state.*'\
 '|.*tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_port_update_new_security_group.*'\
 ')(^tempest\.(api|scenario|thirdparty))'
+
+unset COMMON_TEMPEST_REGEX
+unset NOVA_NETWORK_TEMPEST_REGEX
+unset NEUTRON_NETWORK_TEMPEST_REGEX

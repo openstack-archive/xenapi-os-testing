@@ -1,30 +1,12 @@
 COMMON_TEMPEST_REGEX='(?!.*\[.*\bslow\b.*\]'\
-'|.*tempest.api.volume.test_volumes_actions.VolumesActionsTest.test_volume_upload.*'\
-'|.*tempest.api.volume.test_volumes_actions.VolumesActionsTestXML.test_volume_upload.*'\
-'|.*tempest.api.volume.test_volumes_actions.VolumesV1ActionsTest.test_volume_upload.*'\
-'|.*tempest.api.volume.test_volumes_actions.VolumesV1ActionsTestXML.test_volume_upload.*'\
-'|.*tempest.api.volume.test_volumes_actions.VolumesV2ActionsTest.test_volume_upload.*'\
-'|.*tempest.api.volume.test_volumes_actions.VolumesV2ActionsTestXML.test_volume_upload.*'\
 '|.*tempest.scenario.test_encrypted_cinder_volumes.TestEncryptedCinderVolumes.test_encrypted_cinder_volumes_cryptsetup.*'\
 '|.*tempest.scenario.test_encrypted_cinder_volumes.TestEncryptedCinderVolumes.test_encrypted_cinder_volumes_luks.*'\
-'|.*tempest.scenario.test_minimum_basic.TestMinimumBasicScenario.test_minimum_basic_scenario.*'\
-'|.*tempest.scenario.test_shelve_instance.TestShelveInstance.test_shelve_instance.*'\
-'|.*tempest.scenario.test_shelve_instance.TestShelveInstance.test_shelve_volume_backed_instance.*'\
-'|.*tempest.scenario.test_snapshot_pattern.TestSnapshotPattern.test_snapshot_pattern.*'\
 '|.*tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_create_ebs_image_and_check_boot.*'\
-'|.*tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern.*'\
 '|.*tempest.scenario.test_volume_boot_pattern.TestVolumeBootPatternV2.test_create_ebs_image_and_check_boot.*'\
-'|.*tempest.scenario.test_volume_boot_pattern.TestVolumeBootPatternV2.test_volume_boot_pattern.*'\
-'|.*tempest.thirdparty.boto.test_ec2_instance_run.InstanceRunTest.test_compute_with_volumes.*'\
-'|.*tempest.thirdparty.boto.test_ec2_instance_run.InstanceRunTest.test_run_idempotent_instances.*'\
-'|.*tempest.thirdparty.boto.test_ec2_instance_run.InstanceRunTest.test_run_stop_terminate_instance.*'\
-'|.*tempest.thirdparty.boto.test_ec2_instance_run.InstanceRunTest.test_run_stop_terminate_instance_with_tags.*'\
-'|.*tempest.thirdparty.boto.test_ec2_instance_run.InstanceRunTest.test_run_terminate_instance.*'\
-'|.*tempest.thirdparty.boto.test_ec2_volumes.EC2VolumesTest.test_create_get_delete.*'\
-'|.*tempest.thirdparty.boto.test_ec2_volumes.EC2VolumesTest.test_create_volume_from_snapshot.*'\
-'|.*tempest.thirdparty.boto.test_s3_ec2_images.S3ImagesTest.test_register_get_deregister_aki_image.*'\
-'|.*tempest.thirdparty.boto.test_s3_ec2_images.S3ImagesTest.test_register_get_deregister_ami_image.*'\
-'|.*tempest.thirdparty.boto.test_s3_ec2_images.S3ImagesTest.test_register_get_deregister_ari_image.*'
+'|.*tempest.api.volume.admin.test_volumes_backup.VolumesBackupsAdminV1Test.*'\
+'|.*tempest.api.volume.test_volumes_backup.VolumesBackupsV1Test.*'\
+'|.*tempest.api.volume.admin.test_volumes_backup.VolumesBackupsAdminV2Test.*'\
+'|.*tempest.api.volume.test_volumes_backup.VolumesBackupsV2Test.*'
 
 NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX\
 ')(^tempest\.(api|scenario|thirdparty))'
@@ -61,3 +43,7 @@ NEUTRON_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX\
 '|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_update_router_admin_state.*'\
 '|.*tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_port_update_new_security_group.*'\
 ')(^tempest\.(api|scenario|thirdparty))'
+
+#unset COMMON_TEMPEST_REGEX
+#unset NOVA_NETWORK_TEMPEST_REGEX
+#unset NEUTRON_NETWORK_TEMPEST_REGEX

@@ -3,7 +3,7 @@
 echo $$ >> ~/run_tests.pid
 
 DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
-DEVSTACK_GATE_BRANCH="master"
+DEVSTACK_GATE_BRANCH="skipMultiHost"
 
 export WORKSPACE=${WORKSPACE:-/home/jenkins/workspace/testing}
 
@@ -167,7 +167,7 @@ CRONTAB
     } | run_in_domzero
 )
 
-## config interface and localrc for neutron network
+## config interface and localrc for network
 (
     if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
         # Set IP address for eth3(vmnet) and eth4(pubnet)

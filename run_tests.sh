@@ -84,10 +84,10 @@ PUBNET=$(run_in_domzero xe network-create name-label=pubnet </dev/null)
 PUBVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$PUBNET device=4 </dev/null)
 run_in_domzero xe vif-plug uuid=$PUBVIF </dev/null
 
-if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
-    # Set to keep localrc file as we will config localrc during pre_test_hook
-    export KEEP_LOCALRC=1
+# Set to keep localrc file as we will config localrc during pre_test_hook
+export KEEP_LOCALRC=1
 
+if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
     # Create integration network for compute node
     INTNET=$(run_in_domzero xe network-create name-label=intnet </dev/null)
     export INTBRIDGE=$(run_in_domzero xe network-param-get param-name=bridge uuid=$INTNET </dev/null)
@@ -167,8 +167,9 @@ CRONTAB
     } | run_in_domzero
 )
 
-## config interface and localrc for neutron network
+## config interface and localrc for network
 (
+    localrc="/opt/stack/new/devstack/localrc"
     if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
         # Set IP address for eth3(vmnet) and eth4(pubnet)
         sudo ip addr add 10.1.0.254/24 broadcast 10.1.0.255 dev eth3
@@ -177,7 +178,6 @@ CRONTAB
         sudo ip link set eth4 up
 
         # Set localrc for neutron network
-        localrc="/opt/stack/new/devstack/localrc"
         cat <<EOF >>"$localrc"
 ENABLED_SERVICES+=",neutron,q-agt,q-domua,q-meta,q-svc,q-dhcp,q-l3,q-metering,-n-net"
 Q_PLUGIN=ml2
@@ -210,6 +210,10 @@ ovsdb_interface = vsctl
 of_interface = ovs-ofctl
 EOF
 
+    else
+        # override FLAT_INTERFACE for our CI env
+        echo "FLAT_INTERFACE=eth3" >> "$localrc"
+        grep "FLAT_INTERFACE=" "$localrc"
     fi
 )
 

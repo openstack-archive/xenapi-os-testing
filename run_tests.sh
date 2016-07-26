@@ -196,7 +196,7 @@ CRONTAB
     } | run_in_domzero
 )
 
-## config interface and localrc for neutron network
+## config interface and localrc for network
 (
     if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
         # Set IP address for eth3(vmnet) and eth4(pubnet)

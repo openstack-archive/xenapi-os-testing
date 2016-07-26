@@ -167,8 +167,9 @@ CRONTAB
     } | run_in_domzero
 )
 
-## config interface and localrc for neutron network
+## config interface and localrc for network
 (
+    localrc="/opt/stack/new/devstack/localrc"
     if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
         # Set IP address for eth3(vmnet) and eth4(pubnet)
         sudo ip addr add 10.1.0.254/24 broadcast 10.1.0.255 dev eth3
@@ -177,7 +178,6 @@ CRONTAB
         sudo ip link set eth4 up
 
         # Set localrc for neutron network
-        localrc="/opt/stack/new/devstack/localrc"
         cat <<EOF >>"$localrc"
 ENABLED_SERVICES+=",neutron,q-agt,q-domua,q-meta,q-svc,q-dhcp,q-l3,q-metering,-n-net"
 Q_PLUGIN=ml2
@@ -210,6 +210,9 @@ ovsdb_interface = vsctl
 of_interface = ovs-ofctl
 EOF
 
+    else
+        # override FLAT_INTERFACE for our CI env
+        echo "FLAT_INTERFACE=eth3" >> "$localrc"
     fi
 )
 

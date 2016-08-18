@@ -84,10 +84,10 @@ PUBNET=$(run_in_domzero xe network-create name-label=pubnet </dev/null)
 PUBVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$PUBNET device=4 </dev/null)
 run_in_domzero xe vif-plug uuid=$PUBVIF </dev/null
 
-# Set to keep localrc file as we will config localrc during pre_test_hook
-export KEEP_LOCALRC=1
-
 if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
+    # Set to keep localrc file as we will config localrc during pre_test_hook
+    export KEEP_LOCALRC=1
+
     # Create integration network for compute node
     INTNET=$(run_in_domzero xe network-create name-label=intnet </dev/null)
     export INTBRIDGE=$(run_in_domzero xe network-param-get param-name=bridge uuid=$INTNET </dev/null)
@@ -165,15 +165,6 @@ CRONTAB
         echo "create_directory_for_images"
         echo "create_directory_for_kernels"
     } | run_in_domzero
-)
-
-(
-    localconf="/opt/stack/new/devstack/local.conf"
-    cat <<EOF >>"$localconf"
-[[post-config|/etc/keystone/keystone.conf]]
-[DEFAULT]
-debug = False
-EOF
 )
 
 ## config interface and localrc for neutron network

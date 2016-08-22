@@ -70,6 +70,38 @@ function run_in_domzero() {
     sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 "$@"
 }
 
+# Add second disk for volume test
+SR=$(run_in_domzero xe sr-list name-label="Local\ storage" --minimal </dev/null)
+VM=$(run_in_domzero xe vm-list name-label=devstack --minimal </dev/null)
+
+VDI=$(run_in_domzero xe vdi-create sr-uuid=$SR name-label="secondDisk" type=user virtual-size=3145728000 </dev/null)
+
+VBD=$(run_in_domzero xe vbd-create vm-uuid=$VM vdi-uuid=$VDI  bootable=false type=Disk mode=RW device=1 </dev/null)
+
+run_in_domzero xe vbd-plug uuid=$VBD  </dev/null
+
+disk=/dev/xvdb
+disk_part=${disk}1
+
+sudo fdisk $disk <<EOF
+n
+
+
+
+
+w
+EOF
+
+sudo mkfs.ext3 $disk_part
+
+VG=stack-volumes-lvmdriver-1
+LVMNT=/lvmmnt
+sudo mkdir -p $LVMNT
+sudo mount $disk_part $LVMNT
+sudo truncate -s 24G $LVMNT/$VG
+VG_DEV=$(sudo losetup -f --show $LVMNT/$VG)
+sudo vgcreate $VG $VG_DEV
+
 # Get some parameters
 APP=$(run_in_domzero xe vm-list name-label=$APPLIANCE_NAME --minimal </dev/null)
 

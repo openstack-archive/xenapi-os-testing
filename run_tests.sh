@@ -113,10 +113,21 @@ PUBNET=$(run_in_domzero xe network-create name-label=pubnet </dev/null)
 PUBVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$PUBNET device=4 </dev/null)
 run_in_domzero xe vif-plug uuid=$PUBVIF </dev/null
 
-if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
-    # Set to keep localrc file as we will config localrc during pre_test_hook
-    export KEEP_LOCALRC=1
+# Set to keep localrc file as we will config localrc during pre_test_hook
+export KEEP_LOCALRC=1
 
+# Use thin provision for lvm, so that we can save disk space and avoid large disk IO requests
+# during volume tests.
+(
+    localconf="/opt/stack/new/devstack/local.conf"
+    cat <<EOF >>"$localconf"
+[[post-config|/etc/cinder/cinder.conf]]
+[lvmdriver-1]
+lvm_type = thin
+EOF
+)
+
+if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
     # Create integration network for compute node
     INTNET=$(run_in_domzero xe network-create name-label=intnet </dev/null)
     export INTBRIDGE=$(run_in_domzero xe network-param-get param-name=bridge uuid=$INTNET </dev/null)

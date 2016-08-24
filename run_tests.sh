@@ -205,12 +205,15 @@ CRONTAB
         sudo ip addr add 172.24.5.1/24 broadcast 172.24.5.255 dev eth4
         sudo ip link set eth4 up
 
+        # let traffic go with port 6640 which ovs native interface uses
+        run_in_domzero iptables -t filter -I RH-Firewall-1-INPUT -p tcp --dport 6640 -j ACCEPT
+
         # Set localrc for neutron network
         localrc="/opt/stack/new/devstack/localrc"
         cat <<EOF >>"$localrc"
 ENABLED_SERVICES+=",neutron,q-agt,q-domua,q-meta,q-svc,q-dhcp,q-l3,q-metering,-n-net"
 Q_PLUGIN=ml2
-Q_USE_SECGROUP=False
+Q_USE_SECGROUP=True
 ENABLE_TENANT_VLANS="True"
 ENABLE_TENANT_TUNNELS="False"
 Q_ML2_TENANT_NETWORK_TYPE="vlan"
@@ -234,8 +237,9 @@ EOF
 
 [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
 [ovs]
-ovsdb_interface = vsctl
-of_interface = ovs-ofctl
+ovsdb_connection = tcp:$DEVSTACK_GATE_XENAPI_DOM0_IP:6640
+of_listen_address = $DEVSTACK_GATE_XENAPI_DOMU_IP
+of_listen_port = 6633
 EOF
 
     fi

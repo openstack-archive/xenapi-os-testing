@@ -1,9 +1,5 @@
 COMMON_TEMPEST_REGEX="(?!.*\[.*\bslow\b.*\]"
 
-# waiting for the fix on https://bugs.launchpad.net/nova/+bug/1616938
-COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_create_ebs_image_and_check_boot.*"
-COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.scenario.test_volume_boot_pattern.TestVolumeBootPatternV2.test_create_ebs_image_and_check_boot.*"
-
 # In stable branches don't have this commit: https://review.openstack.org/#/c/326215/
 # so there it uses the default img_disk_format as qcow2, it will fail the following scenario tests.
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.scenario.test_encrypted_cinder_volumes.TestEncryptedCinderVolumes.test_encrypted_cinder_volumes_cryptsetup.*"

@@ -11,8 +11,6 @@ NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX
 NOVA_NETWORK_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX)(^tempest\.(api|scenario|thirdparty))"
 
 NEUTRON_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX
-NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_attach_interfaces.AttachInterfacesTestJSON.test_create_list_show_delete_interfaces.*"
-NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_attach_interfaces.AttachInterfacesTestJSON.test_reassign_port_between_servers.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_server_personality.ServerPersonalityTestJSON.test_rebuild_server_with_personality.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_rebuild_server_in_stop_state.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.admin.test_auto_allocate_network.AutoAllocateNetworkTest.test_server_multi_create_auto_allocate.*"
@@ -24,14 +22,11 @@ NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.comp
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_advanced_server_ops.TestNetworkAdvancedServerOps.test_server_connectivity_pause_unpause.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_advanced_server_ops.TestNetworkAdvancedServerOps.test_server_connectivity_reboot.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_advanced_server_ops.TestNetworkAdvancedServerOps.test_server_connectivity_rebuild.*"
-NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_connectivity_between_vms_on_different_networks.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_advanced_server_ops.TestNetworkAdvancedServerOps.test_server_connectivity_resize.*"
-NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_hotplug_nic.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_cross_tenant_traffic.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_advanced_server_ops.TestNetworkAdvancedServerOps.test_server_connectivity_stop_start.*"
-NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops.*"
+#NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_advanced_server_ops.TestNetworkAdvancedServerOps.test_server_connectivity_suspend_resume.*"
-NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_port_security_macspoofing_port.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_in_tenant_traffic.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_v6.TestGettingAddress.test_dualnet_multi_prefix_dhcpv6_stateless.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_router_rescheduling.*"
@@ -46,6 +41,15 @@ NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario
 
 # exclude rescue tests until bug/1651650 got fixed.
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_server_rescue.*"
+
+# VIF hotplug patch https://review.openstack.org/#/c/365505/ isn't merged, so exclude below tests
+NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_attach_interfaces.AttachInterfacesTestJSON.test_create_list_show_delete_interfaces.*"
+NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_attach_interfaces.AttachInterfacesTestJSON.test_reassign_port_between_servers.*"
+NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_hotplug_nic.*"
+NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_port_security_macspoofing_port.*"
+
+# Skipped until Bug: 1610994 is resolved
+NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_connectivity_between_vms_on_different_networks.*"
 
 # Need resolve the timeout issue when access from floating IP.
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_shelve_instance.TestShelveInstance.test_shelve_instance.*"

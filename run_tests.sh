@@ -121,9 +121,6 @@ if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
     # Create integration network for compute node
     INTNET=$(run_in_domzero xe network-create name-label=intnet </dev/null)
     export INTBRIDGE=$(run_in_domzero xe network-param-get param-name=bridge uuid=$INTNET </dev/null)
-
-    # Remove restriction of linux bridge usage in Dom0, linux bridge is used for security group
-    run_in_domzero rm -f /etc/modprobe.d/blacklist-bridge*
 fi
 
 # Hack iSCSI SR
@@ -262,6 +259,7 @@ Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
 Q_ML2_PLUGIN_TYPE_DRIVERS="vlan,flat"
 OVS_PHYSICAL_BRIDGE=br-ex
 PUBLIC_BRIDGE=br-ex
+PUB_IP=172.24.4.1
 # Set instance build timeout to 300s in tempest.conf
 BUILD_TIMEOUT=390
 EOF
@@ -271,17 +269,10 @@ EOF
 
         cat <<EOF >>"$localconf"
 [[local|localrc]]
-
-[[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini.domU]]
-[ovs]
-ovsdb_interface = vsctl
-of_interface = ovs-ofctl
-
-[[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
-[ovs]
-bridge_mappings = physnet1:br-eth3,public:br-ex
+[[post-config|/etc/nova/nova.conf]]
+[DEFAULT]
+disk_allocation_ratio = 2.0
 EOF
-
     fi
 )
 

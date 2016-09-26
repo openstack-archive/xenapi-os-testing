@@ -49,7 +49,9 @@ export DEVSTACK_GATE_XENAPI_PASSWORD=password
 export DEVSTACK_GATE_CLEAN_LOGS=0
 
 # set regular expression
+set +x
 source /home/jenkins/xenapi-os-testing/tempest_exclusion_list
+set -x
 if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
     export DEVSTACK_GATE_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX"
     export ENABLED_SERVICES=neutron,q-domua
@@ -283,8 +285,9 @@ Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
 Q_ML2_PLUGIN_TYPE_DRIVERS="vlan,flat"
 OVS_PHYSICAL_BRIDGE=br-ex
 PUBLIC_BRIDGE=br-ex
+PUB_IP=172.24.4.1
 # Set instance build timeout to 300s in tempest.conf
-BUILD_TIMEOUT=390
+BUILD_TIMEOUT=540
 EOF
 
         # Set local.conf for neutron ovs-agent in compute node

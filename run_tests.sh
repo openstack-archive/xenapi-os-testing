@@ -310,10 +310,16 @@ EOF
         cat <<EOF >>"$localconf"
 [[local|localrc]]
 
+[[post-config|/etc/nova/nova.conf]]
+[DEFAULT]
+host = Dom0_DevStackOS
+
 [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini.domU]]
 [ovs]
 of_listen_address = $DEVSTACK_GATE_XENAPI_DOMU_IP
 ovsdb_connection = tcp:$DEVSTACK_GATE_XENAPI_DOM0_IP:6640
+[DEFAULT]
+host = Dom0_DevStackOS
 
 [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
 [ovs]

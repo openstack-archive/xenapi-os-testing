@@ -1,12 +1,5 @@
 COMMON_TEMPEST_REGEX="(?!.*\[.*\bslow\b.*\]"
 
-# In stable branches don't have this commit: https://review.openstack.org/#/c/326215/
-# so there it uses the default img_disk_format as qcow2, it will fail the following scenario tests.
-COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.scenario.test_encrypted_cinder_volumes.TestEncryptedCinderVolumes.test_encrypted_cinder_volumes_cryptsetup.*"
-COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.scenario.test_encrypted_cinder_volumes.TestEncryptedCinderVolumes.test_encrypted_cinder_volumes_luks.*"
-COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.scenario.test_minimum_basic.TestMinimumBasicScenario.test_minimum_basic_scenario.*"
-
-
 NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX
 # Wait untill resolve the disk IO bottleneck with nova CI cloud
 NOVA_NETWORK_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.VolumesActionsTest.test_volume_upload.*"

@@ -252,6 +252,8 @@ EOF
     fi
 )
 
+# delete folders to save disk space
+sudo rm -rf /opt/git
 }
 
 # export this function to be used by devstack-gate

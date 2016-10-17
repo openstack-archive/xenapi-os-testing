@@ -252,6 +252,32 @@ EOF
     fi
 )
 
+(
+# fetch depends-on patches.
+if [ "${ZUUL_URL}" = "https://review.openstack.org/p" -a -n "$ZUUL_CHANGES" ]; then
+    # Neutron test nodes still depend on review.openstack.org to fetch changes.
+    # Need fetch depends-on patches specially.
+    changes=$(echo $ZUUL_CHANGES | tr '^' ' ')
+    echo "Processing depends-on changes: $changes"
+    for change in $changes; do
+        project=$(echo $change | cut -d: -f1);
+        # skip the changes belong to $ZUUL_PROJECT which
+        # has been done already the primary routine.
+        if [ "$project" = "$ZUUL_PROJECT" ]; then
+            echo -e "\tSkip the change: $change"
+        else
+            echo -e "\tFetching change: $change."
+            ref=$(echo $change | cut -d: -f3);
+            pushd $BASE/new/$(basename $project)
+            if git fetch $ZUUL_URL/$project $ref; then
+                git merge FETCH_HEAD
+            fi
+            popd
+        fi
+    done
+fi
+)
+
 # delete folders to save disk space
 sudo rm -rf /opt/git
 }

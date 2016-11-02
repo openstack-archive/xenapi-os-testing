@@ -46,6 +46,7 @@ NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_port_security_disable_security_group.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_update_router_admin_state.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_port_update_new_security_group.*"
+NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_boot_into_disabled_port_security_network_without_secgroup.*"
 
 # Need resolve the timeout issue when access from floating IP.
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_shelve_instance.TestShelveInstance.test_shelve_instance.*"

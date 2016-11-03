@@ -52,6 +52,7 @@ export DEVSTACK_GATE_CLEAN_LOGS=0
 source /home/jenkins/xenapi-os-testing/tempest_exclusion_list
 if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
     export DEVSTACK_GATE_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX"
+    export ENABLED_SERVICES=neutron,q-domua
 else
     export DEVSTACK_GATE_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX"
 fi
@@ -219,7 +220,6 @@ EOF
         # Set localrc for neutron network
         localrc="/opt/stack/new/devstack/localrc"
         cat <<EOF >>"$localrc"
-ENABLED_SERVICES+=",neutron,q-agt,q-domua,q-meta,q-svc,q-dhcp,q-l3,q-metering,-n-net"
 Q_PLUGIN=ml2
 Q_USE_SECGROUP=False
 ENABLE_TENANT_VLANS="True"
@@ -247,6 +247,10 @@ EOF
 [ovs]
 ovsdb_interface = vsctl
 of_interface = ovs-ofctl
+
+[[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini.domU]]
+[ovs]
+bridge_mappings = physnet1:br-eth3,public:br-ex
 EOF
 
     fi

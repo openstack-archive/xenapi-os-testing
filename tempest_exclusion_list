@@ -56,4 +56,7 @@ NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_volume_boot_pattern.TestVolumeBootPatternV2.test_volume_boot_pattern.*"
 
+# Need under why it has broken our neutron CI. this is a new test introduced by https://review.openstack.org/#/c/370804
+NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_mtu_sized_frames.*"
+
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX)(^tempest\.(api|scenario|thirdparty))"

@@ -152,7 +152,8 @@ sudo pip install pyyaml
 LOCATION_OF_LOCAL_GIT_REPOSITORIES=/opt/git
 
 # These came from the Readme
-export ZUUL_URL=https://review.openstack.org/p
+# use the ZUUL_URL passed from Jenkins
+export ZUUL_URL=${ZUUL_URL:-https://review.openstack.org/p}
 export REPO_URL=$LOCATION_OF_LOCAL_GIT_REPOSITORIES
 
 # Check out a custom branch

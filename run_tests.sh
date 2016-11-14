@@ -241,6 +241,11 @@ EOF
 
         # Set local.conf for neutron ovs-agent in compute node
         localconf="/opt/stack/new/devstack/local.conf"
+        # check if it's before reverse the role of q-agt and q-domuA.
+        # see: https://review.openstack.org/#/c/396573/
+        if grep 'iniset /$Q_PLUGIN_CONF_FILE agent root_helper_daemon ""' \
+           /opt/stack/new/devstack/lib/neutron_plugins/openvswitch_agent >/dev/null; then
+        # this can be removed once the above patch got merged.
         cat <<EOF >>"$localconf"
 [[local|localrc]]
 
@@ -253,6 +258,22 @@ of_interface = ovs-ofctl
 [ovs]
 bridge_mappings = physnet1:br-eth3,public:br-ex
 EOF
+
+        else
+
+        cat <<EOF >>"$localconf"
+[[local|localrc]]
+
+[[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini.domU]]
+[ovs]
+ovsdb_interface = vsctl
+of_interface = ovs-ofctl
+
+[[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
+[ovs]
+bridge_mappings = physnet1:br-eth3,public:br-ex
+EOF
+        fi
 
     fi
 )

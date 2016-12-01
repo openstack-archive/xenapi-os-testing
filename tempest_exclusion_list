@@ -1,7 +1,7 @@
 COMMON_TEMPEST_REGEX="(?!.*\[.*\bslow\b.*\]"
 
 NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX
-# Wait untill resolve the disk IO bottleneck with nova CI cloud
+# Wait until resolve the disk IO bottleneck with nova CI cloud
 NOVA_NETWORK_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.VolumesActionsTest.test_volume_upload.*"
 NOVA_NETWORK_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.VolumesV1ActionsTest.test_volume_upload.*"
 NOVA_NETWORK_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.VolumesV2ActionsTest.test_volume_upload.*"

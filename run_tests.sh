@@ -236,6 +236,18 @@ lvm_type = thin
 EOF
 )
 
+# reduce the object audit rate to save IO.
+(
+    localconf="/opt/stack/new/devstack/local.conf"
+    cat <<EOF >>"$localconf"
+[[post-config|/etc/swift/object-server/1.conf]]
+[object-auditor]
+files_per_second = 1
+bytes_per_second = 65536
+interval = 3000
+EOF
+)
+
 ## config interface and localrc for neutron network
 (
     if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then

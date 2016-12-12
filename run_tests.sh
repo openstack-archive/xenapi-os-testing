@@ -71,16 +71,36 @@ function run_in_domzero() {
     sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 "$@"
 }
 
-# Add second disk for volume test
-if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
-    SR=$(run_in_domzero xe sr-list name-label="Local\ storage" --minimal </dev/null)
-    VM=$(run_in_domzero xe vm-list name-label=devstack --minimal </dev/null)
-    VDI=$(run_in_domzero xe vdi-create sr-uuid=$SR name-label="secondDisk" type=user virtual-size=3145728000 </dev/null)
-    VBD=$(run_in_domzero xe vbd-create vm-uuid=$VM vdi-uuid=$VDI  bootable=false type=Disk mode=RW device=1 </dev/null)
-    run_in_domzero xe vbd-plug uuid=$VBD  </dev/null
-    disk=/dev/xvdb
-    disk_part=${disk}1
-    sudo fdisk $disk <<EOF
+# Prepare volume group for cinder before hand, so that we can customize the volume storage depending on the
+# CI resource.
+VG=stack-volumes-lvmdriver-1
+if ! sudo vgs | grep -w $VG >/dev/null; then
+    VOLUME_RESERVE_SPACE_GB=${VOLUME_RESERVE_SPACE_GB:-4}
+    MIN_VM_RESERVE_MEM_GB=${MIN_VM_RESERVE_MEM_GB:-6}
+    VOLUME_BACKING_FILE_SIZE=${VOLUME_BACKING_FILE_SIZE:-24}
+
+    # If there is enough free memory, let's use memory file system to hold volumes;
+    # otherwise create a second disk basing on ${VOL_USE_SECOND_DISK}.
+    TOTAL_MEM_GB=$(free -g | grep -- '^Mem:' | awk '{print $2}')
+
+    if [ ${TOTAL_MEM_GB} -ge $((${VOLUME_RESERVE_SPACE_GB} + ${MIN_VM_RESERVE_MEM_GB})) ]; then
+        LVMNT="/memmnt"
+        sudo mkdir -p $LVMNT
+        sudo mount -t tmpfs -o size=${VOLUME_RESERVE_SPACE_GB}G tmpfs $LVMNT
+        sudo truncate -s ${VOLUME_BACKING_FILE_SIZE}G $LVMNT/$VG
+        sudo chmod 777 $LVMNT/$VG
+        VG_DEV=$(sudo losetup -f --show $LVMNT/$VG)
+        sudo vgcreate $VG $VG_DEV
+    else
+        if [ "${VOL_USE_SECOND_DISK}" = "True" ]; then
+            SR=$(run_in_domzero xe sr-list name-label="Local\ storage" --minimal </dev/null)
+            VM=$(run_in_domzero xe vm-list name-label=devstack --minimal </dev/null)
+            VDI=$(run_in_domzero xe vdi-create sr-uuid=$SR name-label="secondDisk" type=user virtual-size=${VOLUME_RESERVE_SPACE_GB}GiB </dev/null)
+            VBD=$(run_in_domzero xe vbd-create vm-uuid=$VM vdi-uuid=$VDI  bootable=false type=Disk mode=RW device=1 </dev/null)
+            run_in_domzero xe vbd-plug uuid=$VBD  </dev/null
+            disk=/dev/xvdb
+            disk_part=${disk}1
+            sudo fdisk $disk <<EOF
 n
 
 
@@ -89,15 +109,15 @@ n
 w
 EOF
 
-    sudo mkfs.ext3 $disk_part
-
-    VG=stack-volumes-lvmdriver-1
-    LVMNT=/lvmmnt
-    sudo mkdir -p $LVMNT
-    sudo mount $disk_part $LVMNT
-    sudo truncate -s 24G $LVMNT/$VG
-    VG_DEV=$(sudo losetup -f --show $LVMNT/$VG)
-    sudo vgcreate $VG $VG_DEV
+            sudo mkfs.ext3 $disk_part
+            LVMNT=/lvmmnt
+            sudo mkdir -p $LVMNT
+            sudo mount $disk_part $LVMNT
+            sudo truncate -s ${VOLUME_BACKING_FILE_SIZE}G $LVMNT/$VG
+            VG_DEV=$(sudo losetup -f --show $LVMNT/$VG)
+            sudo vgcreate $VG $VG_DEV
+        fi
+    fi
 fi
 
 # Get some parameters

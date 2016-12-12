@@ -71,16 +71,30 @@ function run_in_domzero() {
     sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 "$@"
 }
 
-# Add second disk for volume test
-if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
-    SR=$(run_in_domzero xe sr-list name-label="Local\ storage" --minimal </dev/null)
-    VM=$(run_in_domzero xe vm-list name-label=devstack --minimal </dev/null)
-    VDI=$(run_in_domzero xe vdi-create sr-uuid=$SR name-label="secondDisk" type=user virtual-size=3145728000 </dev/null)
-    VBD=$(run_in_domzero xe vbd-create vm-uuid=$VM vdi-uuid=$VDI  bootable=false type=Disk mode=RW device=1 </dev/null)
-    run_in_domzero xe vbd-plug uuid=$VBD  </dev/null
-    disk=/dev/xvdb
-    disk_part=${disk}1
-    sudo fdisk $disk <<EOF
+# Prepare volume group for cinder before hand, so that we can customize the volume storage depending on the
+# CI resource.
+VG=stack-volumes-lvmdriver-1
+if ! vgs | grep -w $VG >/dev/null; then
+    # If there is enough free memory, let's use memory file system to hold volumes;
+    # otherwise create a second disk.
+    free_mem_GB=$(free -g | grep -- '-/+ buffers/cache' | awk '{print $4}')
+    if [ ${free_mem_GB} -gt 6 ]; then
+        LVMNT="/memmnt"
+        sudo mkdir -p $LVMNT
+        sudo mount -t tmpfs -o size=4G tmpfs $LVMNT
+        sudo truncate -s 24G $LVMNT/$VG
+        sudo chmod 777 $LVMNT/$VG
+        VG_DEV=$(sudo losetup -f --show $LVMNT/$VG)
+        sudo vgcreate $VG $VG_DEV
+    else
+        SR=$(run_in_domzero xe sr-list name-label="Local\ storage" --minimal </dev/null)
+        VM=$(run_in_domzero xe vm-list name-label=devstack --minimal </dev/null)
+        VDI=$(run_in_domzero xe vdi-create sr-uuid=$SR name-label="secondDisk" type=user virtual-size=3145728000 </dev/null)
+        VBD=$(run_in_domzero xe vbd-create vm-uuid=$VM vdi-uuid=$VDI  bootable=false type=Disk mode=RW device=1 </dev/null)
+        run_in_domzero xe vbd-plug uuid=$VBD  </dev/null
+        disk=/dev/xvdb
+        disk_part=${disk}1
+        sudo fdisk $disk <<EOF
 n
 
 
@@ -89,15 +103,14 @@ n
 w
 EOF
 
-    sudo mkfs.ext3 $disk_part
-
-    VG=stack-volumes-lvmdriver-1
-    LVMNT=/lvmmnt
-    sudo mkdir -p $LVMNT
-    sudo mount $disk_part $LVMNT
-    sudo truncate -s 24G $LVMNT/$VG
-    VG_DEV=$(sudo losetup -f --show $LVMNT/$VG)
-    sudo vgcreate $VG $VG_DEV
+        sudo mkfs.ext3 $disk_part
+        LVMNT=/lvmmnt
+        sudo mkdir -p $LVMNT
+        sudo mount $disk_part $LVMNT
+        sudo truncate -s 24G $LVMNT/$VG
+        VG_DEV=$(sudo losetup -f --show $LVMNT/$VG)
+        sudo vgcreate $VG $VG_DEV
+    fi
 fi
 
 # Get some parameters
@@ -236,6 +249,18 @@ lvm_type = thin
 EOF
 )
 
+# reduce the object audit rate to save IO.
+(
+    localconf="/opt/stack/new/devstack/local.conf"
+    cat <<EOF >>"$localconf"
+[[post-config|/etc/swift/object-server/1.conf]]
+[object-auditor]
+files_per_second = 1
+bytes_per_second = 65536
+interval = 3000
+EOF
+)
+
 ## config interface and localrc for neutron network
 (
     if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
@@ -273,12 +298,16 @@ EOF
 [[local|localrc]]
 
 [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini.domU]]
+[agent]
+minimize_polling = True
 [ovs]
-ovsdb_interface = vsctl
-of_interface = ovs-ofctl
+of_listen_address = $DEVSTACK_GATE_XENAPI_DOMU_IP
+ovsdb_connection = tcp:$DEVSTACK_GATE_XENAPI_DOM0_IP:6640
 
 [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
 [ovs]
+of_listen_address = 127.0.0.1
+ovsdb_connection = tcp:127.0.0.1:6640
 bridge_mappings = physnet1:br-eth3,public:br-ex
 EOF
 

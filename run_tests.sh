@@ -269,6 +269,7 @@ EOF
         # Set localrc for neutron network
         localrc="/opt/stack/new/devstack/localrc"
         cat <<EOF >>"$localrc"
+enable_plugin os-xenapi https://github.com/openstack/os-xenapi.git refs/changes/82/398182/18
 Q_PLUGIN=ml2
 Q_USE_SECGROUP=True
 ENABLE_TENANT_VLANS="True"
@@ -295,11 +296,13 @@ EOF
 
 [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini.domU]]
 [ovs]
-ovsdb_interface = vsctl
-of_interface = ovs-ofctl
+of_listen_address = $DEVSTACK_GATE_XENAPI_DOMU_IP
+ovsdb_connection = tcp:$DEVSTACK_GATE_XENAPI_DOM0_IP:6640
 
 [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
 [ovs]
+of_listen_address = 127.0.0.1
+ovsdb_connection = tcp:127.0.0.1:6640
 bridge_mappings = physnet1:br-eth3,public:br-ex
 EOF
 

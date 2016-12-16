@@ -3,7 +3,7 @@
 echo $$ >> ~/run_tests.pid
 
 DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
-DEVSTACK_GATE_BRANCH="master"
+DEVSTACK_GATE_BRANCH="use-os-xenapi"
 
 export WORKSPACE=${WORKSPACE:-/home/jenkins/workspace/testing}
 
@@ -269,6 +269,7 @@ EOF
         # Set localrc for neutron network
         localrc="/opt/stack/new/devstack/localrc"
         cat <<EOF >>"$localrc"
+enable_plugin os-xenapi https://github.com/openstack/os-xenapi.git refs/changes/82/398182/18
 Q_PLUGIN=ml2
 Q_USE_SECGROUP=True
 ENABLE_TENANT_VLANS="True"

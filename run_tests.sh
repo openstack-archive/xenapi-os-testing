@@ -28,6 +28,9 @@ set -ex
 
 #REPLACE_ENV
 
+export PROJECTS="openstack/os-xenapi $PROJECTS"
+export DEVSTACK_LOCAL_CONFIG="enable_plugin os-xenapi git://git.openstack.org/openstack/os-xenapi refs/changes/82/398182/22"
+
 export ZUUL_PROJECT=${ZUUL_PROJECT:-openstack/nova}
 export ZUUL_BRANCH=${ZUUL_BRANCH:-master}
 export ZUUL_REF=${ZUUL_REF:-HEAD}

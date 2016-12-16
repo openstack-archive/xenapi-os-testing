@@ -284,7 +284,7 @@ Q_ML2_PLUGIN_TYPE_DRIVERS="vlan,flat"
 OVS_PHYSICAL_BRIDGE=br-ex
 PUBLIC_BRIDGE=br-ex
 # Set instance build timeout to 300s in tempest.conf
-BUILD_TIMEOUT=390
+BUILD_TIMEOUT=300
 EOF
 
         # Set local.conf for neutron ovs-agent in compute node

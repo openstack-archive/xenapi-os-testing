@@ -3,7 +3,7 @@
 echo $$ >> ~/run_tests.pid
 
 DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
-DEVSTACK_GATE_BRANCH="master"
+DEVSTACK_GATE_BRANCH="use-os-xenapi-2"
 
 export WORKSPACE=${WORKSPACE:-/home/jenkins/workspace/testing}
 
@@ -47,6 +47,7 @@ export DEVSTACK_GATE_XENAPI_DOM0_IP=192.168.33.2
 export DEVSTACK_GATE_XENAPI_DOMU_IP=192.168.33.1
 export DEVSTACK_GATE_XENAPI_PASSWORD=password
 export DEVSTACK_GATE_CLEAN_LOGS=0
+export ERROR_ON_CLONE=False
 
 # set regular expression
 source /home/jenkins/xenapi-os-testing/tempest_exclusion_list
@@ -269,6 +270,7 @@ EOF
         # Set localrc for neutron network
         localrc="/opt/stack/new/devstack/localrc"
         cat <<EOF >>"$localrc"
+enable_plugin os-xenapi https://github.com/openstack/os-xenapi.git refs/changes/82/398182/18
 Q_PLUGIN=ml2
 Q_USE_SECGROUP=True
 ENABLE_TENANT_VLANS="True"

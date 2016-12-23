@@ -197,6 +197,9 @@ sudo mv $TEMPFILE /etc/sudoers.d/40_stack_sh
 
 function pre_test_hook() {
 
+# roll back lxml to avoid error when run cli command - "openstack"
+sed -i -e 's/lxml===3.7.0/lxml===3.6.4/g' /opt/stack/new/requirements/upper-constraints.txt
+
 (
 # fetch depends-on patches.
 if [ "${ZUUL_URL}" = "https://review.openstack.org/p" -a -n "$ZUUL_CHANGES" ]; then

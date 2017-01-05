@@ -11,7 +11,7 @@ NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX
 NOVA_NETWORK_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX)(^tempest\.(api|scenario|thirdparty))"
 
 NEUTRON_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX
-NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_attach_interfaces.AttachInterfacesTestJSON.test_create_list_show_delete_interfaces.*"
+#NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_attach_interfaces.AttachInterfacesTestJSON.test_create_list_show_delete_interfaces.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_attach_interfaces.AttachInterfacesTestJSON.test_reassign_port_between_servers.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_server_personality.ServerPersonalityTestJSON.test_rebuild_server_with_personality.*"
 NEUTRON_NETWORK_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX|.*tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_rebuild_server_in_stop_state.*"

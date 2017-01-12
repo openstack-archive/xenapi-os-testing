@@ -286,6 +286,8 @@ Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
 Q_ML2_PLUGIN_TYPE_DRIVERS="vlan,flat"
 OVS_PHYSICAL_BRIDGE=br-ex
 PUBLIC_BRIDGE=br-ex
+# enable validation tests which is needed by device tagging tests.
+TEMPEST_RUN_VALIDATION="True"
 # Set instance build timeout to 300s in tempest.conf
 BUILD_TIMEOUT=390
 EOF
@@ -306,6 +308,10 @@ ovsdb_connection = tcp:$DEVSTACK_GATE_XENAPI_DOM0_IP:6640
 of_listen_address = 127.0.0.1
 ovsdb_connection = tcp:127.0.0.1:6640
 bridge_mappings = physnet1:br-eth3,public:br-ex
+
+[[test-config|/opt/stack/new/tempest/etc/tempest.conf]]
+[validation]
+connect_timeout = 390
 EOF
 
     fi

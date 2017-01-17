@@ -171,7 +171,6 @@ done
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1
 
-sudo pip install -i https://pypi.python.org/simple/ XenAPI
 sudo pip install pyyaml
 
 LOCATION_OF_LOCAL_GIT_REPOSITORIES=/opt/git

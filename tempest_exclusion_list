@@ -1,10 +1,8 @@
 COMMON_TEMPEST_REGEX="(?!.*\[.*\bslow\b.*\]"
 
 # Exclude volume backup and upload tests to avoid heavy disk IO.
-COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_backup.*"
-COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.VolumesActionsTest.test_volume_upload.*"
-COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.VolumesV1ActionsTest.test_volume_upload.*"
-COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.VolumesV2ActionsTest.test_volume_upload.*"
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.*test_volumes_backup.*"
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.*test_volume_upload.*"
 
 
 NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX

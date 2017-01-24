@@ -310,6 +310,13 @@ EOF
     fi
 )
 
+# enable image cache to avoid downloading images frequently
+cat <<EOF >>"$localconf"
+[[post-config|/etc/nova/nova.conf]]
+[xenserver]
+cache_images = all
+EOF
+
 # delete folders to save disk space
 sudo rm -rf /opt/git
 }

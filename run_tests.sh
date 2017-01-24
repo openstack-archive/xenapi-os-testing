@@ -80,56 +80,6 @@ function run_in_domzero() {
     sudo -u domzero ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.33.2 "$@"
 }
 
-# Prepare volume group for cinder before hand, so that we can customize the volume storage depending on the
-# CI resource.
-VG=stack-volumes-lvmdriver-1
-if ! sudo vgs | grep -w $VG >/dev/null; then
-    VOLUME_RESERVE_SPACE_GB=${VOLUME_RESERVE_SPACE_GB:-4}
-    MIN_VM_RESERVE_MEM_GB=${MIN_VM_RESERVE_MEM_GB:-6}
-    VOLUME_BACKING_FILE_SIZE=${VOLUME_BACKING_FILE_SIZE:-24}
-    VOL_USE_SECOND_DISK=${VOL_USE_SECOND_DISK:-"False"}
-
-    # If there is enough free memory, let's use memory file system to hold volumes;
-    # otherwise create a second disk basing on ${VOL_USE_SECOND_DISK}.
-    TOTAL_MEM_GB=$(free -g | grep -- '^Mem:' | awk '{print $2}')
-
-    if [ ${TOTAL_MEM_GB} -ge $((${VOLUME_RESERVE_SPACE_GB} + ${MIN_VM_RESERVE_MEM_GB})) ]; then
-        LVMNT="/memmnt"
-        sudo mkdir -p $LVMNT
-        sudo mount -t tmpfs -o size=${VOLUME_RESERVE_SPACE_GB}G tmpfs $LVMNT
-        sudo truncate -s ${VOLUME_BACKING_FILE_SIZE}G $LVMNT/$VG
-        sudo chmod 777 $LVMNT/$VG
-        VG_DEV=$(sudo losetup -f --show $LVMNT/$VG)
-        sudo vgcreate $VG $VG_DEV
-    else
-        if [ "${VOL_USE_SECOND_DISK}" = "True" ]; then
-            SR=$(run_in_domzero xe sr-list name-label="Local\ storage" --minimal </dev/null)
-            VM=$(run_in_domzero xe vm-list name-label=devstack --minimal </dev/null)
-            VDI=$(run_in_domzero xe vdi-create sr-uuid=$SR name-label="secondDisk" type=user virtual-size=${VOLUME_RESERVE_SPACE_GB}GiB </dev/null)
-            VBD=$(run_in_domzero xe vbd-create vm-uuid=$VM vdi-uuid=$VDI  bootable=false type=Disk mode=RW device=1 </dev/null)
-            run_in_domzero xe vbd-plug uuid=$VBD  </dev/null
-            disk=/dev/xvdb
-            disk_part=${disk}1
-            sudo fdisk $disk <<EOF
-n
-
-
-
-
-w
-EOF
-
-            sudo mkfs.ext3 $disk_part
-            LVMNT=/lvmmnt
-            sudo mkdir -p $LVMNT
-            sudo mount $disk_part $LVMNT
-            sudo truncate -s ${VOLUME_BACKING_FILE_SIZE}G $LVMNT/$VG
-            VG_DEV=$(sudo losetup -f --show $LVMNT/$VG)
-            sudo vgcreate $VG $VG_DEV
-        fi
-    fi
-fi
-
 # Get some parameters
 APP=$(run_in_domzero xe vm-list name-label=$APPLIANCE_NAME --minimal </dev/null)
 
@@ -346,6 +296,24 @@ OS_XENAPI_DIR=/opt/stack/new/os-xenapi
 if [  -d $OS_XENAPI_DIR -a -n "$(echo $ZUUL_CHANGES | grep openstack/os-xenapi)" ]; then
     sudo -H pip install -e $OS_XENAPI_DIR
 fi
+)
+
+# Prepare memory FS to how stack data.
+(
+    DATA_DIR=/opt/stack/data
+    if [ -e ${DATA_DIR} ]; then
+        # At here it shouldn't exist.
+        echo "${DATA_DIR} already exist."
+        exit 1
+    fi
+    sudo mkdir -p ${DATA_DIR}
+    DATA_RESERVE_SPACE_GB=${DATA_RESERVE_SPACE_GB:-4}
+    MIN_VM_RESERVE_MEM_GB=${MIN_VM_RESERVE_MEM_GB:-6}
+    # If there is enough free memory, let's use memory file system for DATA_DIR
+    TOTAL_MEM_GB=$(free -g | grep -- '^Mem:' | awk '{print $2}')
+    if [ ${TOTAL_MEM_GB} -ge $((${DATA_RESERVE_SPACE_GB} + ${MIN_VM_RESERVE_MEM_GB})) ]; then
+        sudo mount -t tmpfs -o size=${DATA_RESERVE_SPACE_GB}G tmpfs ${DATA_DIR}
+    fi
 )
 
 # delete folders to save disk space

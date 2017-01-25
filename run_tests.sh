@@ -52,7 +52,10 @@ export DEVSTACK_GATE_XENAPI_PASSWORD=password
 export DEVSTACK_GATE_CLEAN_LOGS=0
 
 # set regular expression
+# Not display the long list for the exclusion regex when populate the variables.
+set +x
 source /home/jenkins/xenapi-os-testing/tempest_exclusion_list
+set -x
 if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
     export DEVSTACK_GATE_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX"
     export ENABLED_SERVICES=neutron,q-domua

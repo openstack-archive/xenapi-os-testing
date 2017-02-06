@@ -320,6 +320,10 @@ ovsdb_connection = tcp:$DEVSTACK_GATE_XENAPI_DOM0_IP:6640
 of_listen_address = 127.0.0.1
 ovsdb_connection = tcp:127.0.0.1:6640
 bridge_mappings = physnet1:br-eth3,public:br-ex
+
+[[test-config|\\\$TEMPEST_CONFIG]]
+[compute]
+hypervisor_type = XenServer
 EOF
 
     fi

@@ -2,6 +2,9 @@
 
 echo $$ >> ~/run_tests.pid
 
+# print build id passed from Jenkins for easy tracking.
+echo "BUILD_ID = $BUILD_ID"
+
 DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
 DEVSTACK_GATE_BRANCH="master"
 

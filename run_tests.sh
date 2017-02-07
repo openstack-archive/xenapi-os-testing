@@ -5,8 +5,8 @@ echo $$ >> ~/run_tests.pid
 # print build id passed from Jenkins for easy tracking.
 echo "BUILD_ID = $BUILD_ID"
 
-DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
-DEVSTACK_GATE_BRANCH="master"
+DEVSTACK_GATE_REPO="https://github.com/jianghuaw/devstack-gate"
+DEVSTACK_GATE_BRANCH="supportXenAPI"
 
 export WORKSPACE=${WORKSPACE:-/home/jenkins/workspace/testing}
 
@@ -177,7 +177,7 @@ done
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1
 
-sudo pip install pyyaml
+sudo -H pip install pyyaml
 
 LOCATION_OF_LOCAL_GIT_REPOSITORIES=/opt/git
 

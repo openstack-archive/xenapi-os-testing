@@ -277,9 +277,60 @@ interval = 3000
 EOF
 )
 
-## config interface and localrc for neutron network
+## config interface and localrc
 (
-    if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
+
+    localrc="/opt/stack/new/devstack/localrc"
+
+    ## common part
+    cat >> "$localrc_file" << EOF
+# Need to force devstack to run because we currently use saucy
+FORCE=yes
+
+SKIP_EXERCISES=${SKIP_EXERCISES},volumes
+XENAPI_PASSWORD=${DEVSTACK_GATE_XENAPI_PASSWORD}
+XENAPI_CONNECTION_URL=http://${DEVSTACK_GATE_XENAPI_DOM0_IP}
+VNCSERVER_PROXYCLIENT_ADDRESS=${DEVSTACK_GATE_XENAPI_DOM0_IP}
+VIRT_DRIVER=xenserver
+
+# A separate xapi network on eth4 serves the purpose of the public network.
+# This interface is added in Citrix's XenServer environment as an internal
+# interface
+PUBLIC_INTERFACE=eth4
+
+# The xapi network "vmnet" is connected to eth3 in domU
+# We need to explicitly specify these, as the devstack/xenserver driver
+# sets GUEST_INTERFACE_DEFAULT
+VLAN_INTERFACE=eth3
+FLAT_INTERFACE=eth3
+
+# Explicitly set HOST_IP, so that it will be passed down to xapi,
+# thus it will be able to reach glance
+HOST_IP=${DEVSTACK_GATE_XENAPI_DOMU_IP}
+SERVICE_HOST=${DEVSTACK_GATE_XENAPI_DOMU_IP}
+
+# Disable firewall
+XEN_FIREWALL_DRIVER=nova.virt.firewall.NoopFirewallDriver
+
+# Disable agent
+EXTRA_OPTS=("xenapi_disable_agent=True")
+
+# Add a separate device for volumes
+VOLUME_BACKING_DEVICE=/dev/xvdb
+
+# We use single host for XenAPI test
+MULTI_HOST=False
+EOF
+
+    if [ "$DEVSTACK_GATE_NEUTRON" -ne "1" ]; then
+        # For Nova network specific.
+        cat <<EOF >>"$localrc"
+# A separate xapi network is created with this name-label
+FLAT_NETWORK_BRIDGE=vmnet
+EOF
+    else
+        # For Neutron network specific
+
         # Set IP address for eth3(vmnet) and eth4(pubnet)
         sudo ip addr add 10.1.0.254/24 broadcast 10.1.0.255 dev eth3
         sudo ip link set eth3 up
@@ -287,7 +338,6 @@ EOF
         sudo ip link set eth4 up
 
         # Set localrc for neutron network
-        localrc="/opt/stack/new/devstack/localrc"
         cat <<EOF >>"$localrc"
 Q_PLUGIN=ml2
 Q_USE_SECGROUP=True
@@ -295,7 +345,6 @@ ENABLE_TENANT_VLANS="True"
 ENABLE_TENANT_TUNNELS="False"
 Q_ML2_TENANT_NETWORK_TYPE="vlan"
 ML2_VLAN_RANGES="physnet1:1000:1024"
-MULTI_HOST=0
 XEN_INTEGRATION_BRIDGE=$INTBRIDGE
 FLAT_NETWORK_BRIDGE=$VMBRIDGE
 Q_AGENT=openvswitch

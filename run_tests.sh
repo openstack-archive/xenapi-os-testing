@@ -277,9 +277,19 @@ interval = 3000
 EOF
 )
 
-## config interface and localrc for neutron network
+## config interface and localrc
 (
-    if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
+
+    localrc="/opt/stack/new/devstack/localrc"
+    if [ "$DEVSTACK_GATE_NEUTRON" -ne "1" ]; then
+        # For Nova network specific.
+        cat <<EOF >>"$localrc"
+# A separate xapi network is created with this name-label
+FLAT_NETWORK_BRIDGE=vmnet
+EOF
+    else
+        # For Neutron network specific
+
         # Set IP address for eth3(vmnet) and eth4(pubnet)
         sudo ip addr add 10.1.0.254/24 broadcast 10.1.0.255 dev eth3
         sudo ip link set eth3 up
@@ -287,7 +297,6 @@ EOF
         sudo ip link set eth4 up
 
         # Set localrc for neutron network
-        localrc="/opt/stack/new/devstack/localrc"
         cat <<EOF >>"$localrc"
 Q_PLUGIN=ml2
 Q_USE_SECGROUP=True

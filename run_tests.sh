@@ -177,7 +177,7 @@ done
 # For development:
 export SKIP_DEVSTACK_GATE_PROJECT=1
 
-sudo pip install pyyaml
+sudo -H pip install pyyaml
 
 LOCATION_OF_LOCAL_GIT_REPOSITORIES=/opt/git
 

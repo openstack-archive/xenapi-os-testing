@@ -338,6 +338,16 @@ cache_images = all
 EOF
 )
 
+# If os-xenapi is in the patch list(include watched change on os-xenapi and
+# the change depended by other changes), pip install it from local repo. So
+# the os-xenapi changes will be verified via CI tests.
+(
+OS_XENAPI_DIR=/opt/stack/new/os-xenapi
+if [  -d $OS_XENAPI_DIR -a -n "$(echo $ZUUL_CHANGES | grep openstack/os-xenapi)" ]; then
+    sudo -H pip install -e $OS_XENAPI_DIR
+fi
+)
+
 # delete folders to save disk space
 sudo rm -rf /opt/git
 }

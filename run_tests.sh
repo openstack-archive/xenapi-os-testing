@@ -231,11 +231,6 @@ if [ "${ZUUL_URL}" = "https://review.openstack.org/p" -a -n "$ZUUL_CHANGES" ]; t
 fi
 )
 
-# Plugins
-tar -czf - -C /opt/stack/new/nova/plugins/xenserver/xenapi/etc/xapi.d/plugins/ ./ |
-    run_in_domzero \
-    'tar -xzf - -C /etc/xapi.d/plugins/ && chmod a+x /etc/xapi.d/plugins/*'
-
 # Console log
 tar -czf - -C /opt/stack/new/nova/tools/xenserver/ rotate_xen_guest_logs.sh |
     run_in_domzero \

@@ -214,9 +214,11 @@ if [ "${ZUUL_URL}" = "https://review.openstack.org/p" -a -n "$ZUUL_CHANGES" ]; t
     echo "Processing depends-on changes: $changes"
     for change in $changes; do
         project=$(echo $change | cut -d: -f1);
-        # skip the changes belong to $ZUUL_PROJECT which
-        # has been done already the primary routine.
-        if [ "$project" = "$ZUUL_PROJECT" ]; then
+        # Skip the changes belong to $ZUUL_PROJECT which
+        # has been done already in the primary routine.
+        # And also only handle projects which belong to $PROJECTS, otherwise
+        # the repo won't exist under $BASE/new/: e.g. xenapi-os-testing.
+        if [ "$project" = "$ZUUL_PROJECT" -o -z "$(echo $PROJECTS | grep $project)" ]; then
             echo -e "\tSkip the change: $change"
         else
             echo -e "\tFetching change: $change."

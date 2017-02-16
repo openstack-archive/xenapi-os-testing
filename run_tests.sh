@@ -302,6 +302,9 @@ OVS_PHYSICAL_BRIDGE=br-ex
 PUBLIC_BRIDGE=br-ex
 # Set instance build timeout to 300s in tempest.conf
 BUILD_TIMEOUT=390
+
+#TODO: remove this
+CIRROS_VERSION=0.3.4
 EOF
 
         # Set local.conf for neutron ovs-agent in compute node
@@ -320,6 +323,7 @@ ovsdb_connection = tcp:$DEVSTACK_GATE_XENAPI_DOM0_IP:6640
 of_listen_address = 127.0.0.1
 ovsdb_connection = tcp:127.0.0.1:6640
 bridge_mappings = physnet1:br-eth3,public:br-ex
+
 EOF
 
     fi

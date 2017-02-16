@@ -1,0 +1,8 @@
+Code-Review+2: Jianghua Wang <jianghua.wang@citrix.com>
+Workflow+1: Jianghua Wang <jianghua.wang@citrix.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Thu, 16 Feb 2017 07:26:55 +0000
+Reviewed-on: https://review.openstack.org/434659
+Project: openstack/xenapi-os-testing
+Branch: refs/heads/master

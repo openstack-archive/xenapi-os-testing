@@ -4,6 +4,7 @@ COMMON_TEMPEST_REGEX="(?!.*\[.*\bslow\b.*\]"
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.*test_volumes_backup.*"
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.*test_volume_upload.*"
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.scenario.test_stamp_pattern.TestStampPattern.*"
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.images.test_list_image_filters.*"
 
 
 NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX

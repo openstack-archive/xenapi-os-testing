@@ -255,9 +255,6 @@ OVS_PHYSICAL_BRIDGE=br-ex
 PUBLIC_BRIDGE=br-ex
 # Set instance build timeout to 300s in tempest.conf
 BUILD_TIMEOUT=390
-
-#TODO: remove this
-CIRROS_VERSION=0.3.4
 EOF
     fi
 

@@ -5,8 +5,10 @@ echo $$ >> ~/run_tests.pid
 # print build id passed from Jenkins for easy tracking.
 echo "BUILD_ID = $BUILD_ID"
 
-DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
-DEVSTACK_GATE_BRANCH="master"
+#DEVSTACK_GATE_REPO="https://github.com/citrix-openstack/devstack-gate"
+#DEVSTACK_GATE_BRANCH="master"
+DEVSTACK_GATE_REPO="https://github.com/jianghuaw/devstack-gate"
+DEVSTACK_GATE_BRANCH="supportXenAPI-2"
 
 export WORKSPACE=${WORKSPACE:-/home/jenkins/workspace/testing}
 
@@ -112,7 +114,7 @@ PUBNET=$(run_in_domzero xe network-create name-label=pubnet </dev/null)
 PUBVIF=$(run_in_domzero xe vif-create vm-uuid=$APP network-uuid=$PUBNET device=4 </dev/null)
 run_in_domzero xe vif-plug uuid=$PUBVIF </dev/null
 
-# Set to keep localrc file as we will config localrc during pre_test_hook
+# Set to keep localrc_file as we will config localrc_file during pre_test_hook
 export KEEP_LOCALRC=1
 
 if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
@@ -219,41 +221,26 @@ CRONTAB
     } | run_in_domzero
 )
 
-# Use thin provision for lvm, so that we can save disk space and avoid large disk IO requests
-# during volume tests.
-(
-    localconf="/opt/stack/new/devstack/local.conf"
-    cat <<EOF >>"$localconf"
-[[post-config|/etc/cinder/cinder.conf]]
-[lvmdriver-1]
-lvm_type = thin
-EOF
-)
-
-# reduce the object audit rate to save IO.
-(
-    localconf="/opt/stack/new/devstack/local.conf"
-    cat <<EOF >>"$localconf"
-[[post-config|/etc/swift/object-server/1.conf]]
-[object-auditor]
-files_per_second = 1
-bytes_per_second = 65536
-interval = 3000
-EOF
-)
-
-## config interface and localrc for neutron network
 (
     if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
-        # Set IP address for eth3(vmnet) and eth4(pubnet)
+        # Set IP address for eth3(vmnet) and eth4(pubnet) for Neutron
         sudo ip addr add 10.1.0.254/24 broadcast 10.1.0.255 dev eth3
         sudo ip link set eth3 up
         sudo ip addr add 172.24.5.1/24 broadcast 172.24.5.255 dev eth4
         sudo ip link set eth4 up
+    fi
+)
 
-        # Set localrc for neutron network
-        localrc="/opt/stack/new/devstack/localrc"
-        cat <<EOF >>"$localrc"
+(
+    # configure localrc_file
+    localrc_file="/opt/stack/new/devstack/local.conf"
+
+    # the section of [[local|localrc]]
+
+    if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
+        # Set localrc_file for neutron network
+        cat <<EOF >>"$localrc_file"
+[[local|localrc]]
 Q_PLUGIN=ml2
 Q_USE_SECGROUP=True
 ENABLE_TENANT_VLANS="True"
@@ -271,20 +258,35 @@ PUBLIC_BRIDGE=br-ex
 # Set instance build timeout to 300s in tempest.conf
 BUILD_TIMEOUT=390
 
-#TODO: remove this
-CIRROS_VERSION=0.3.4
+EOF
+    fi
+
+    # the section for [[post-config|<conf file>]]; let's put the items sorted with the conf file path.
+
+    # Use thin provision for lvm, so that we can save disk space and avoid large disk IO requests
+    # during volume tests.
+    cat <<EOF >>"$localrc_file"
+[[post-config|/etc/cinder/cinder.conf]]
+[lvmdriver-1]
+lvm_type = thin
 EOF
 
-        # Set local.conf for neutron ovs-agent in compute node
-        localconf="/opt/stack/new/devstack/local.conf"
+    # enable image cache to avoid downloading images frequently
+    cat <<EOF >>"$localrc_file"
+[[post-config|/etc/nova/nova.conf]]
+[xenserver]
+cache_images = all
+EOF
 
-        cat <<EOF >>"$localconf"
-[[local|localrc]]
+    # Set localrc_file for neutron ovs-agent in compute node
+    if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
+        cat <<EOF >>"$localrc_file"
 
 [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini.domU]]
 [ovs]
 of_listen_address = $DEVSTACK_GATE_XENAPI_DOMU_IP
 ovsdb_connection = tcp:$DEVSTACK_GATE_XENAPI_DOM0_IP:6640
+bridge_mappings = physnet1:$VMBRIDGE
 
 [[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
 [ovs]
@@ -294,16 +296,16 @@ bridge_mappings = physnet1:br-eth3,public:br-ex
 EOF
 
     fi
-)
 
-# enable image cache to avoid downloading images frequently
-(
-    localconf="/opt/stack/new/devstack/local.conf"
+    # reduce the object audit rate to save IO.
     cat <<EOF >>"$localconf"
-[[post-config|/etc/nova/nova.conf]]
-[xenserver]
-cache_images = all
+[[post-config|/etc/swift/object-server/1.conf]]
+[object-auditor]
+files_per_second = 1
+bytes_per_second = 65536
+interval = 3000
 EOF
+
 )
 
 # If os-xenapi is in the patch list(include watched change on os-xenapi and

@@ -25,9 +25,27 @@ function trapexit {
     # Do not use 'exit' - bash will preserve the status
 }
 
+function ensure_swap {
+    # Add more swap by using loop device as upstream devstack-gate will ensure
+    # there are at leat 8GB swap. But actually we should have enough memory
+    # for CI jobs at the moment.
+    SWAPSIZE=8192
+    swapcurrent=$(( $(grep SwapTotal /proc/meminfo | awk '{ print $2; }') / 1024 ))
+    if [[ $swapcurrent -lt $SWAPSIZE ]]; then
+        swapdiff=$(( $SWAPSIZE - $swapcurrent ))
+        SWAP_FILE=/root/.swapfile
+        sudo truncate -s ${swapdiff}M ${SWAP_FILE}
+        SWAP_DEV=$(sudo losetup -f --show ${SWAP_FILE})
+        sudo mkswap ${SWAP_DEV}
+        sudo swapon ${SWAP_DEV}
+    fi
+}
+
 trap trapexit EXIT
 
 set -ex
+
+ensure_swap
 
 #REPLACE_ENV
 

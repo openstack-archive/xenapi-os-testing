@@ -4,6 +4,8 @@ COMMON_TEMPEST_REGEX="(?!.*\[.*\bslow\b.*\]"
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.*test_volumes_backup.*"
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.*test_volume_upload.*"
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.servers.test_novnc.NoVNCConsoleTestJSON.test_novnc.*"
+# Exclude the device tagging tests as that feature is still under development: https://review.openstack.org/#/c/333781
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.servers.test_device_tagging.*"
 
 NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX
 NOVA_NETWORK_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX)(^tempest\.(api|scenario|thirdparty))"

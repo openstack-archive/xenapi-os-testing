@@ -253,6 +253,7 @@ Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
 Q_ML2_PLUGIN_TYPE_DRIVERS="vlan,flat"
 OVS_PHYSICAL_BRIDGE=br-ex
 PUBLIC_BRIDGE=br-ex
+TEMPEST_RUN_VALIDATION="True"
 # Set instance build timeout to 300s in tempest.conf
 BUILD_TIMEOUT=390
 EOF

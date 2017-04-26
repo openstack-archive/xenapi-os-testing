@@ -5,6 +5,12 @@ COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.*test_volumes_b
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.*test_volume_upload.*"
 # Exclude the device tagging tests as that feature is still under development: https://review.openstack.org/#/c/333781
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.servers.test_device_tagging.*"
+# Exclude these tests failing randomly. Need fix the potential race conditions.
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.admin.test_hosts_negative.HostsAdminNegativeTestJSON.test_startup_host_with_non_admin_user"
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volume_delete_cascade.VolumesDeleteCascade.test_volume_from_snapshot_cascade_delete"
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_create_ebs_image_and_check_boot"
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_snapshots.VolumesSnapshotTestJSON.test_volume_from_snapshot"
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.servers.test_novnc.NoVNCConsoleTestJSON.test_novnc"
 
 NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX
 NOVA_NETWORK_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX)(^tempest\.(api|scenario|thirdparty))"

@@ -50,6 +50,7 @@ ensure_swap
 #REPLACE_ENV
 
 export PROJECTS="openstack/os-xenapi $PROJECTS"
+export PROJECTS="openstack/ceilometer $PROJECTS"
 export DEVSTACK_LOCAL_CONFIG=${DEVSTACK_LOCAL_CONFIG:-"enable_plugin os-xenapi git://git.openstack.org/openstack/os-xenapi"}
 
 export ZUUL_PROJECT=${ZUUL_PROJECT:-openstack/nova}
@@ -79,7 +80,7 @@ source /home/jenkins/xenapi-os-testing/tempest_exclusion_list
 set -x
 if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
     export DEVSTACK_GATE_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX"
-    export ENABLED_SERVICES=neutron,q-domua
+    export ENABLED_SERVICES=neutron,q-domua,ceilometer-acompute
 else
     export DEVSTACK_GATE_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX"
 fi
@@ -239,6 +240,8 @@ CRONTAB
         # Set localconf_file for neutron network
         cat <<EOF >>"$localconf_file"
 [[local|localrc]]
+enable_plugin ceilometer https://git.openstack.org/openstack/ceilometer
+
 Q_PLUGIN=ml2
 Q_USE_SECGROUP=True
 ENABLE_TENANT_VLANS="True"

@@ -79,7 +79,7 @@ source /home/jenkins/xenapi-os-testing/tempest_exclusion_list
 set -x
 if [ "$DEVSTACK_GATE_NEUTRON" -eq "1" ]; then
     export DEVSTACK_GATE_TEMPEST_REGEX="$NEUTRON_NETWORK_TEMPEST_REGEX"
-    export ENABLED_SERVICES=neutron,q-domua
+    export ENABLED_SERVICES=neutron,q-domua,ceilometer-acompute
 else
     export DEVSTACK_GATE_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX"
 fi
@@ -239,6 +239,8 @@ CRONTAB
         # Set localconf_file for neutron network
         cat <<EOF >>"$localconf_file"
 [[local|localrc]]
+DEST=/opt/stack/new
+
 Q_PLUGIN=ml2
 Q_USE_SECGROUP=True
 ENABLE_TENANT_VLANS="True"
@@ -256,6 +258,11 @@ PUBLIC_BRIDGE=br-ex
 TEMPEST_RUN_VALIDATION="True"
 # Set instance build timeout to 300s in tempest.conf
 BUILD_TIMEOUT=390
+
+# ceilometer part
+enable_plugin ceilometer https://git.openstack.org/openstack/ceilometer
+CEILOMETER_USE_MOD_WSGI=False
+CEILOMETER_BACKEND=mysql
 EOF
     fi
 

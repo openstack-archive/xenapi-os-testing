@@ -72,6 +72,16 @@ export DEVSTACK_GATE_XENAPI_DOMU_IP=192.168.33.1
 export DEVSTACK_GATE_XENAPI_PASSWORD=password
 export DEVSTACK_GATE_CLEAN_LOGS=0
 
+# Journald default is to not persist logs to disk if /var/log/journal is
+# not present. Update the configuration to set storage to persistent which
+# will create /var/log/journal if necessary and store logs on disk. This
+# avoids the situation where test runs can fill the journald ring buffer
+# deleting older logs that may be important to the job.
+if [ -f /etc/systemd/journald.conf ] ; then
+    sudo sed -i -e 's/#Storage=auto/Storage=persistent/' /etc/systemd/journald.conf
+    sudo systemctl restart systemd-journald
+fi
+
 # set regular expression
 # Not display the long list for the exclusion regex when populate the variables.
 set +x

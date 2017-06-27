@@ -137,7 +137,9 @@ fi
 # Hack iSCSI SR
 run_in_domzero << SRHACK
 set -eux
-sed -ie "s/'phy'/'aio'/g" /opt/xensource/sm/ISCSISR.py
+if [ -e /opt/xensource/sm/ISCSISR.py ]; then
+    sed -ie "s/'phy'/'aio'/g" /opt/xensource/sm/ISCSISR.py
+fi
 SRHACK
 
 # This is important, otherwise dhcp client will fail

@@ -3,6 +3,8 @@ COMMON_TEMPEST_REGEX="(?!.*\[.*\bslow\b.*\]"
 # Exclude volume backup and upload tests to avoid heavy disk IO.
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.*test_volumes_backup.*"
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_actions.*test_volume_upload.*"
+# Exclude the device tagging tests as that feature is still under development: https://review.openstack.org/#/c/333781
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.servers.test_device_tagging.*"
 # Exclude these tests failing randomly. Need fix the potential race conditions.
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.admin.test_hosts_negative.HostsAdminNegativeTestJSON.test_startup_host_with_non_admin_user"
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volume_delete_cascade.VolumesDeleteCascade.test_volume_from_snapshot_cascade_delete"

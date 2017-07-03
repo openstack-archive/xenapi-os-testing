@@ -1,5 +1,10 @@
 COMMON_TEMPEST_REGEX="(?!.*\[.*\bslow\b.*\]"
 
+# Exclude device tagging on stable/ocata
+if [ "$ZUUL_BRANCH" = "stable/ocata" ]; then
+    COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.servers.test_device_tagging.*"
+fi
+
 # Exlude some glance tests before fix the CI broken by glance switching to running
 # under wsgi
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.images.test_images_oneserver.ImagesOneServerTestJSON.test_create_delete_image.*"

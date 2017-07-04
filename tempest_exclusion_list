@@ -5,7 +5,10 @@ if [ "$ZUUL_BRANCH" = "stable/ocata" ]; then
     COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.servers.test_device_tagging.*"
 fi
 
-# Exlude some glance tests before fix the CI broken by glance switching to running
+# Exclude encrypted volume tests which will create HVM VM which is not supported in nest virt env.
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_boot_server_from_encrypted_volume_luks"
+
+# Exclude some glance tests before fix the CI broken by glance switching to running
 # under wsgi
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.images.test_images_oneserver.ImagesOneServerTestJSON.test_create_delete_image.*"
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.images.test_list_image_filters.ListImageFiltersTestJSON.*"

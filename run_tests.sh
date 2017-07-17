@@ -192,6 +192,9 @@ if [ "${ZUUL_URL}" = "https://review.openstack.org/p" -a -n "$ZUUL_CHANGES" ]; t
     # Need fetch depends-on patches specially.
     changes=$(echo $ZUUL_CHANGES | tr '^' ' ')
     echo "Processing depends-on changes: $changes"
+    # set default global config for "git merge"
+    git config --global user.email "jenkins@default.com"
+    git config --global user.name "jenkins"
     for change in $changes; do
         project=$(echo $change | cut -d: -f1);
         # Skip the changes belong to $ZUUL_PROJECT which

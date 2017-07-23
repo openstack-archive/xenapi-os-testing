@@ -285,10 +285,12 @@ lvm_type = thin
 EOF
 
     # enable image cache to avoid downloading images frequently
+    # also enable the new image_handler: vdi_remote_stream.
     cat <<EOF >>"$localconf_file"
 [[post-config|/etc/nova/nova.conf]]
 [xenserver]
 cache_images = all
+image_handler = vdi_remote_stream
 EOF
 
     # Set localconf_file for neutron ovs-agent in compute node

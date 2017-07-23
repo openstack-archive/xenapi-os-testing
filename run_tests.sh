@@ -288,7 +288,10 @@ EOF
     cat <<EOF >>"$localconf_file"
 [[post-config|/etc/nova/nova.conf]]
 [xenserver]
-cache_images = all
+cache_images = none
+image_upload_handler = nova.virt.xenapi.image.vdi_stream.GlanceStore
+image_download_handler = nova.virt.xenapi.image.vdi_stream.GlanceStore
+
 EOF
 
     # Set localconf_file for neutron ovs-agent in compute node

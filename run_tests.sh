@@ -286,7 +286,7 @@ EOF
 
     # enable image cache to avoid downloading images frequently
     cat <<EOF >>"$localconf_file"
-[[post-config|/etc/nova/nova.conf]]
+[[post-config|/etc/nova/nova-cpu.conf]]
 [xenserver]
 cache_images = all
 EOF

@@ -23,6 +23,9 @@ COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.admin.test_ser
 # Exclude novnc test to avoid CI failures. Will fix it soon
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.servers.test_novnc.NoVNCConsoleTestJSON.test_novnc"
 
+# Exclude device tagging test for port and volume until they are added
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.servers.test_device_tagging.TaggedAttachmentsTest.test_tagged_attachment.*"
+
 NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX
 NOVA_NETWORK_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX)(^tempest\.(api|scenario|thirdparty))"
 

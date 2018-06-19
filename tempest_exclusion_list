@@ -21,6 +21,9 @@ COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.volume.test_volumes_sn
 # Exclude server diagnostics tests. Need figure out why it's frequently failed.
 COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.admin.test_server_diagnostics.*"
 
+# remove trust image cert test temporarily
+COMMON_TEMPEST_REGEX="$COMMON_TEMPEST_REGEX|.*tempest.api.compute.servers.test_servers.ServerShowV263Test.test_show_update_rebuild_list_server"
+
 NOVA_NETWORK_TEMPEST_REGEX=$COMMON_TEMPEST_REGEX
 NOVA_NETWORK_TEMPEST_REGEX="$NOVA_NETWORK_TEMPEST_REGEX)(^tempest\.(api|scenario|thirdparty))"
 

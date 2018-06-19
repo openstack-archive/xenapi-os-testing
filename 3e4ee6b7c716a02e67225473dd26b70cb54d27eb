@@ -1,0 +1,8 @@
+Code-Review+2: Naichuan Sun <naichuan.sun@citrix.com>
+Workflow+1: Naichuan Sun <naichuan.sun@citrix.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Tue, 19 Jun 2018 15:42:38 +0000
+Reviewed-on: https://review.openstack.org/576556
+Project: openstack/xenapi-os-testing
+Branch: refs/heads/master

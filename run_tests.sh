@@ -143,9 +143,9 @@ fi
 SRHACK
 
 # This is important, otherwise dhcp client will fail
-for dev in eth0 eth1 eth2 eth3 eth4; do
-    sudo ethtool -K $dev tx off
-done
+#for dev in eth0 eth1 eth2 eth3 eth4; do
+    #sudo ethtool -K $dev tx off
+#done
 
 # Add a separate disk
 # Not used as VOLUME_BACKING_DEVICE is ignored by devstack

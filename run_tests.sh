@@ -287,6 +287,10 @@ EOF
     # enable image cache to avoid downloading images frequently
     cat <<EOF >>"$localconf_file"
 [[post-config|/etc/nova/nova.conf]]
+[DEFAULT]
+disk_allocation_ratio = 2.0
+ram_allocation_ratio = 1.5
+cpu_allocation_ratio = 16.0
 [xenserver]
 cache_images = all
 EOF

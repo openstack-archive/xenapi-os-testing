@@ -50,7 +50,7 @@ ensure_swap
 #REPLACE_ENV
 
 export PROJECTS="openstack/os-xenapi $PROJECTS"
-export DEVSTACK_LOCAL_CONFIG=${DEVSTACK_LOCAL_CONFIG:-"enable_plugin os-xenapi git://git.openstack.org/openstack/os-xenapi"}
+export DEVSTACK_LOCAL_CONFIG=${DEVSTACK_LOCAL_CONFIG:-"enable_plugin os-xenapi https://git.openstack.org/openstack/os-xenapi"}
 
 export ZUUL_PROJECT=${ZUUL_PROJECT:-openstack/nova}
 export ZUUL_BRANCH=${ZUUL_BRANCH:-master}

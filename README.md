@@ -1,4 +1,3 @@
-xenapi-os-testing
-=================
+# This repo has moved to OpenDev
 
-Scripts to try out official XenAPI testing
+It can now be found at [https://opendev.org/x/xenapi-os-testing](https://opendev.org/x/xenapi-os-testing)
